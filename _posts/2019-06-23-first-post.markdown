@@ -4,6 +4,14 @@ title:  "First Post"
 date:   2019-06-23 10:00:51 -0700
 categories: posts
 ---
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$'], ['\\(','\\)']],
+    processEscapes: true
+  }
+});
+</script>
 <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML' async></script>
 Here is a test post.  It's awesome.
 
