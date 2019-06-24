@@ -4,6 +4,7 @@ title:  "First Post"
 date:   2019-06-23 10:00:51 -0700
 categories: posts
 ---
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML' async></script>
 Here is a test post.  It's awesome.
 
 Jekyll also offers powerful support for code snippets:
@@ -16,11 +17,7 @@ print_hi('Tom')
 #=> prints 'Hi, Tom' to STDOUT.
 {% endhighlight %}
 
-$\int f'(x)dx = f(x)+C$
-
-{% raw %}
-  $$a^2 + b^2 = c^2$$ --> note that all equations between these tags will not need escaping! 
- {% endraw %}
+$$\int f'(x)dx = f(x)+C$$
 
 Check out the [Jekyll docs][jekyll-docs] for more info on how to get the most out of Jekyll. File all bugs/feature requests at [Jekyll’s GitHub repo][jekyll-gh]. If you have questions, you can ask them on [Jekyll Talk][jekyll-talk].
 
