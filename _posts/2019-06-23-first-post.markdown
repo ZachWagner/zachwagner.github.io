@@ -19,6 +19,8 @@ print_hi('Tom')
 
 $$\int f'(x)dx = f(x)+C$$
 
+Here's an inline equation: $e^{i\pi}+1=0$.
+
 Check out the [Jekyll docs][jekyll-docs] for more info on how to get the most out of Jekyll. File all bugs/feature requests at [Jekyll’s GitHub repo][jekyll-gh]. If you have questions, you can ask them on [Jekyll Talk][jekyll-talk].
 
 [jekyll-docs]: https://jekyllrb.com/docs/home
