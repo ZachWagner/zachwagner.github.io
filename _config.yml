@@ -16,8 +16,11 @@
 title: Zach Wagner's Site
 # email: your-email@example.com
 description: >- # this means to ignore newlines until "baseurl:"
-  Welcome to my page.  I am a graduate student in the  mathematics department.  I'm exploring my
-  areas of research interest, which will likely focus on either PDEs or topology.
+  I am a first year mathematics graduate student at the University of California, Santa Barbara.  I'm exploring my
+  areas of research interest, which are quite diverse at the moment and include topology, analysis, PDEs, and functional analysis.  I imagine
+  these will soon converge into a more targeted area of interest.
+
+  This site will include links to my research efforts and teaching resources for my current students.
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "" # the base hostname & protocol for your site, e.g. http://example.com
 #twitter_username: jekyllrb
@@ -25,7 +28,7 @@ github_username:  zachwagner
 
 # Build settings
 markdown: kramdown
-theme: minima
+#theme: minima
 plugins:
   - jekyll-feed
 
