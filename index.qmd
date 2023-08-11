@@ -12,5 +12,3 @@ My office is in South Hall, Room 6432K (in the grad tower).
 I maintain my blog on this site, as well as post research updates. 
 
 <a href="mailto:zwagner@math.ucsb.edu">email</a>
-
-Test
