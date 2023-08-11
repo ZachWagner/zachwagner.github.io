@@ -1,5 +1,10 @@
 ---
 title: "Blog"
+listing:
+  contents: Blog
+  sort: "date desc"
+  type: default
+  categories: true
 ---
 
 I post blog entries discussing a variety of mathematical topics, as well as some personal anecdotes about my experiences in academia. I try to post a variety of topics, including those related to my research as well as some slightly off-topic mathematical interests. Please note that I'm the only one who proofreads the material I post; if you notice any errors, please let me know and I will be happy to correct them. 

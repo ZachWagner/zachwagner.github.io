@@ -14,14 +14,6 @@ website:
       - file: Blog.qmd
         text: "Blog"
 
-  sidebar:
-    -title: "Blog"
-    style: "floating"
-    search: true
-    contents:
-      - section: "Blog"
-        contents: Blog/*
-
   search:
     location: navbar
     type: textbox
