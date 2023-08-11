@@ -46,13 +46,34 @@
     "href": "Blog.html",
     "title": "Blog",
     "section": "",
-    "text": "I post blog entries discussing a variety of mathematical topics, as well as some personal anecdotes about my experiences in academia. I try to post a variety of topics, including those related to my research as well as some slightly off-topic mathematical interests. Please note that I’m the only one who proofreads the material I post; if you notice any errors, please let me know and I will be happy to correct them."
+    "text": "I post blog entries discussing a variety of mathematical topics, as well as some personal anecdotes about my experiences in academia. I try to post a variety of topics, including those related to my research as well as some slightly off-topic mathematical interests. Please note that I’m the only one who proofreads the material I post; if you notice any errors, please let me know and I will be happy to correct them.\n\n\n\n\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "Blog/Test.html",
     "href": "Blog/Test.html",
+    "title": "Test Blog",
+    "section": "",
+    "text": "This is a test post."
+  },
+  {
+    "objectID": "Blog/Functional Analysis and PDEs/Fractional Derivatives.html",
+    "href": "Blog/Functional Analysis and PDEs/Fractional Derivatives.html",
     "title": "Test",
     "section": "",
     "text": "Test blog entry (more to come)."
+  },
+  {
+    "objectID": "Blog/Functional Analysis and PDEs/Fractional Derivatives 20230801.html",
+    "href": "Blog/Functional Analysis and PDEs/Fractional Derivatives 20230801.html",
+    "title": "Fractional Derivatives (08/01/2023)",
+    "section": "",
+    "text": "This is an equation: \\(x^2+2x+3=0\\). Here’s a big equation,\n\\[x^2+2x+3=0\\]"
+  },
+  {
+    "objectID": "Blog/Second test.html",
+    "href": "Blog/Second test.html",
+    "title": "Second Test Blog",
+    "section": "",
+    "text": "This is a test post, for the second time."
   }
 ]
