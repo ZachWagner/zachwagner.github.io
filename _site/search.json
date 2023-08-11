@@ -1,0 +1,79 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Welcome!",
+    "section": "",
+    "text": "I am a fifth year mathematics Ph.D. candidate at the University of California, Santa Barbara.\nMy office is in South Hall, Room 6432K (in the grad tower).\nI maintain my blog on this site, as well as post research updates.\nemail"
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "About this site"
+  },
+  {
+    "objectID": "Teaching.html",
+    "href": "Teaching.html",
+    "title": "Teaching",
+    "section": "",
+    "text": "Math 6A, Summer Session A 2021 (Remote Instruction)"
+  },
+  {
+    "objectID": "Teaching.html#courses-as-instructor-of-record",
+    "href": "Teaching.html#courses-as-instructor-of-record",
+    "title": "Teaching",
+    "section": "",
+    "text": "Math 6A, Summer Session A 2021 (Remote Instruction)"
+  },
+  {
+    "objectID": "Teaching.html#courses-as-a-teaching-assistant",
+    "href": "Teaching.html#courses-as-a-teaching-assistant",
+    "title": "Teaching",
+    "section": "Courses as a Teaching Assistant",
+    "text": "Courses as a Teaching Assistant\n\nMath 6A, Winter 2022\nMath 6B, Fall 2021\nMath 117, Summer Session B 2021 (Remote Instruction)\nMath 4B, Spring 2021 (Remote Instruction)\nMath 118B, Winter 2021 (Remote Instruction)\nMath 118A, Fall 2020 (Remote Instruction)\nMath 6B, Summer Session B 2020 (Remote Instruction)\nMath 3A, Spring 2020 (Remote Instruction)\nMath 6B, Winter 2020\nMath 34A, Fall 2019"
+  },
+  {
+    "objectID": "Research.html",
+    "href": "Research.html",
+    "title": "Research",
+    "section": "",
+    "text": "Here’s my CV (Updated July 2023)\nI’m working with the applied mathematics group at UCSB, under the supervision of Carlos Garcia-Cervera. My general areas of research are:\n\nRelativistic Quantum Mechanics\nVariational Problems Pertaining to Energy Minimization of Quantum Systems\nFunctional Analysis\nPartial Differential Equations\nNumerical Methods in Quantum Mathematics\n\nI’ll post publications/preprints here when they become available."
+  },
+  {
+    "objectID": "Blog.html",
+    "href": "Blog.html",
+    "title": "Blog",
+    "section": "",
+    "text": "I post blog entries discussing a variety of mathematical topics, as well as some personal anecdotes about my experiences in academia. I try to post a variety of topics, including those related to my research as well as some slightly off-topic mathematical interests. Please note that I’m the only one who proofreads the material I post; if you notice any errors, please let me know and I will be happy to correct them.\n\n\n\n\n\n\n\n\n\nNo matching items"
+  },
+  {
+    "objectID": "Blog/Test.html",
+    "href": "Blog/Test.html",
+    "title": "Test Blog",
+    "section": "",
+    "text": "This is a test post."
+  },
+  {
+    "objectID": "Blog/Functional Analysis and PDEs/Fractional Derivatives.html",
+    "href": "Blog/Functional Analysis and PDEs/Fractional Derivatives.html",
+    "title": "Test",
+    "section": "",
+    "text": "Test blog entry (more to come)."
+  },
+  {
+    "objectID": "Blog/Functional Analysis and PDEs/Fractional Derivatives 20230801.html",
+    "href": "Blog/Functional Analysis and PDEs/Fractional Derivatives 20230801.html",
+    "title": "Fractional Derivatives (08/01/2023)",
+    "section": "",
+    "text": "This is an equation: \\(x^2+2x+3=0\\). Here’s a big equation,\n\\[x^2+2x+3=0\\]"
+  },
+  {
+    "objectID": "Blog/Second test.html",
+    "href": "Blog/Second test.html",
+    "title": "Second Test Blog",
+    "section": "",
+    "text": "This is a test post, for the second time."
+  }
+]

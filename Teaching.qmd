@@ -1,0 +1,21 @@
+---
+title: "Teaching"
+sidebar: false
+---
+
+## Courses as Instructor of Record
+
+* Math 6A, Summer Session A 2021 (Remote Instruction)
+
+## Courses as a Teaching Assistant
+
+* Math 6A, Winter 2022
+* Math 6B, Fall 2021
+* Math 117, Summer Session B 2021 (Remote Instruction)
+* Math 4B, Spring 2021 (Remote Instruction)
+* Math 118B, Winter 2021 (Remote Instruction)
+* Math 118A, Fall 2020 (Remote Instruction)
+* Math 6B, Summer Session B 2020 (Remote Instruction)
+* Math 3A, Spring 2020 (Remote Instruction)
+* Math 6B, Winter 2020
+* Math 34A, Fall 2019

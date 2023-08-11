@@ -1,0 +1,16 @@
+---
+title: "Research"
+sidebar: false
+---
+
+<a href="/etc/CV.pdf" target="_blank">Here's my CV (Updated July 2023)</a>
+
+I'm working with the applied mathematics group at UCSB, under the supervision of Carlos Garcia-Cervera. My general areas of research are:
+
+* Relativistic Quantum Mechanics
+* Variational Problems Pertaining to Energy Minimization of Quantum Systems
+* Functional Analysis
+* Partial Differential Equations
+* Numerical Methods in Quantum Mathematics
+
+I'll post publications/preprints here when they become available.

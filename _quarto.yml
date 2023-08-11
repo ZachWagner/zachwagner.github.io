@@ -1,0 +1,31 @@
+project:
+  type: website
+  output-dir: docs
+
+website:
+  title: "Zach Wagner"
+  navbar:
+    left:
+      - file: index.qmd
+        text: "Home"
+      - file: Research.qmd
+        text: "Research"
+      - file: Teaching.qmd
+        text: "Teaching"
+      - file: Blog.qmd
+        text: "Blog"
+
+  search:
+    location: navbar
+    type: textbox
+
+format:
+  html:
+    theme:
+      light: cosmo
+      dark: darkly
+    css: styles.css
+    toc: true
+
+
+
