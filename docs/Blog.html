@@ -73,9 +73,9 @@ ul.task-list li input[type="checkbox"] {
     }
 
     const options = {
-      valueNames: ['listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
+      valueNames: ['listing-date','listing-title','listing-author','listing-image','listing-description','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
       
-      searchColumns: ["listing-categories"],
+      searchColumns: ["listing-date","listing-title","listing-author","listing-image","listing-description","listing-categories"],
     };
 
     window['quarto-listings'] = window['quarto-listings'] || {};
@@ -146,7 +146,7 @@ ul.task-list li input[type="checkbox"] {
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         
-    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(0)</span></div></div></div>
+    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Functional Analysis">Functional Analysis <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Operator Theory">Operator Theory <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Partial Differential Equations">Partial Differential Equations <span class="quarto-category-count">(1)</span></div></div></div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
@@ -174,7 +174,47 @@ ul.task-list li input[type="checkbox"] {
 
 <div class="quarto-listing quarto-listing-container-default" id="listing-listing">
 <div class="list quarto-listing-default">
+<div class="quarto-post image-right" data-index="0" data-categories="Operator Theory,Functional Analysis,Partial Differential Equations" data-listing-date-sort="1691046000000" data-listing-file-modified-sort="1694104925528" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4">
+<div class="thumbnail">
+<p><a href="./Blog/Fractional Derivatives.html"> <div class="listing-item-img-placeholder card-img-top" >&nbsp;</div> </a></p>
+</div>
+<div class="body">
+<a href="./Blog/Fractional Derivatives.html">
+<h3 class="no-anchor listing-title">
+Fractional Derivatives
+</h3>
+<div class="listing-subtitle">
 
+</div>
+</a>
+<div class="listing-categories">
+<div class="listing-category" onclick="window.quartoListingCategory('Operator Theory'); return false;">
+Operator Theory
+</div>
+<div class="listing-category" onclick="window.quartoListingCategory('Functional Analysis'); return false;">
+Functional Analysis
+</div>
+<div class="listing-category" onclick="window.quartoListingCategory('Partial Differential Equations'); return false;">
+Partial Differential Equations
+</div>
+</div>
+<a href="./Blog/Fractional Derivatives.html">
+<div class="listing-description">
+<p>A quick introduction to the theory and some applications of fractional derivatives.</p>
+</div>
+</a>
+</div>
+<div class="metadata">
+<a href="./Blog/Fractional Derivatives.html">
+<div class="listing-date">
+Aug 3, 2023
+</div>
+<div class="listing-author">
+Zach Wagner
+</div>
+</a>
+</div>
+</div>
 </div>
 <div class="listing-no-matching d-none">
 No matching items
