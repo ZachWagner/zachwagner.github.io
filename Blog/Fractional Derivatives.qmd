@@ -8,7 +8,7 @@ categories:
   - Functional Analysis
   - Partial Differential Equations
 bibliography: Fractional Derivatives Refs.bib
-draft: true
+draft: false
 ---
 
 This is meant to be a very quick exposition on fractional derivatives, with particular emphasis paid to functions in $H^{1/2}$. When I introduce my area of research to colleagues, I inevitably discuss four-spinors $\psi\in H^{1/2}(\mathbb{R}^3;\mathbb{C}^4)$. This usually leads to an impromptu discussion of $H^{1/2}$ and why we care about it. I'll attempt to give a brief overview of these ideas here. 
