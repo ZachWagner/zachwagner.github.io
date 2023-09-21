@@ -499,7 +499,7 @@ Loss at epoch 99000: 0.003737200517207384</code></pre>
 <span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">self</span>.sequential_model(x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The loss function is really ugly since I need to compute all polynomial features and their derivatives, so I’ve left the loss function collapsed. I wanted to use scikit-learn’s polynomial feature class, but this destroyed the derivative data in my tensors, so I’d have to create a polynomial feature class from scratch. I might do this in the future, but for now everything is hardcoded.</p>
-<div class="cell" data-execution_count="7">
+<div class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> loss2(x, y, t, xbdry, ybdry, tbdry, network):</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    x.requires_grad <span class="op">=</span> <span class="va">True</span></span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    y.requires_grad <span class="op">=</span> <span class="va">True</span></span>
