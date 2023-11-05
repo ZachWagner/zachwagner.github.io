@@ -2,6 +2,7 @@
   {
     "listing": "/Blog.html",
     "items": [
+      "/Blog/Restricting the Dirac Fock energy to the Electron Subspace.html",
       "/Blog/Heat Equation.html",
       "/Blog/Neural Poisson Solver.html",
       "/Blog/Fractional Derivatives.html"
