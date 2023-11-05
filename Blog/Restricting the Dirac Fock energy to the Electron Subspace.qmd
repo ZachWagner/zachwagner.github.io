@@ -1,0 +1,73 @@
+---
+title: "Restricting the Dirac-Fock energy to the Electron Subspace"
+description: "A variational method to solving the Dirac-Fock equations when restricted to the subspace induced by the positive spectral projector of the dirac operator."
+author: "Zach Wagner"
+date: "11/05/2023"
+categories:
+  - Functional Analysis
+  - Partial Differential Equations
+bibliography: Restricting Dirac Fock Refs.bib
+draft: true
+---
+
+This is meant to be a very quick exposition on fractional derivatives, with particular emphasis paid to functions in $H^{1/2}$. When I introduce my area of research to colleagues, I inevitably discuss four-spinors $\psi\in H^{1/2}(\mathbb{R}^3;\mathbb{C}^4)$. This usually leads to an impromptu discussion of $H^{1/2}$ and why we care about it. I'll attempt to give a brief overview of these ideas here. 
+
+## The Sobolev Space $H^s$
+
+Recall that Sobolev spaces comprise of functions who's derivative(s) exist in some weak sense. One of the purposes of considering such functions is to solve a PDE over a larger class of functions than the PDE's domain. One can then try to recover appropriate regularity of the "weak" solution of the PDE. In this sense, one defines functions with $k$ weak derivatives for some positive integer $k$. It turns out you can generalize this notation to define fractional derivatives of functions. We reference [@evans_partial_2010] and [@lieb_loss_analysis] for this discussion. 
+
+The space $H^s(\mathbb{R}^n)$ for any positive real number $s$ consists of functions $f\in L^2(\mathbb{R}^n)$ with the property that $(1+|x|^s)\widehat{f}\in L^2(\mathbb{R}^n)$. The associated norm is,
+
+$$||f||_{H^s(\mathbb{R}^n)}:=||(1+|x|^s)\widehat{f}||_2$$
+
+In the particular case of $H^{1/2}$ this is sometimes equivalently characterized as,
+
+$$||f||_{H^{1/2}(\mathbb{R}^n)}^2:=||(1+|x|^2)^{1/2}|\widehat{f}(x)|^2||_2^2$$
+
+This Fourier characterization of Sobolev spaces for integer $s$ is equivalent to the more traditional definition of weakly differentiable functions. It can be very useful for both analytical as well as technical reasons. First, let me give a simple example of the former. Using the fourier characterization, one easily shows that if $f\in H^s(\mathbb{R}^n)$ where $s>\frac{n}{2}$, then in fact $f\in L^\infty(\mathbb{R}^n)$. This follows from the following computation,
+
+$$|f(x)|=\left|\frac{1}{(2\pi)^{n/2}}\int_{\mathbb{R}^n}e^{-ip\cdot x}\widehat{f}(p)dx\right|\leq\frac{1}{(2\pi)^{n/2}}\int\frac{1+|p|^s}{1+|p|^s}|\widehat{f}(p)|dx $$
+
+$$\leq\frac{1}{(2\pi)^{n/2}}||f||_{H^s(\mathbb{R}^n)}^2\left|\left|\frac{1}{1+|p|^s}\right|\right|_2^2$$
+
+where the latter inequality follows by Holder's inequality. Since $s>\frac{n}{2}$, the right hand side is finite, as needed. 
+
+## Fractional Differential Operators
+
+The fractional Sobolev space $H^{1/2}$ arises naturally in relativistic quantum mechanics [@thaller_dirac]. The Klein-Gordon operator arises from quantizing the classical relativistic energy-momentum equation. The operator is,
+
+$$\sqrt{m^2c^4-c^2\Delta}\tag{1}$$
+
+How do we apply such an operator? Such fractional operators are defined using the Fourier transform. 
+
+$$\sqrt{m^2c^4-c^2\Delta}f(x):=\left(\sqrt{m^2c^4+c^2p^2}\widehat{f}(p)\right)^{\vee}\tag{2}$$
+
+When solving variational problems in quantum mathematics, we study the energy of quantum systems and try to find the ground state of a quantum system. Alternatively, we seek critical points of quantum energy functionals. The operator (1) isn't really what we analyze when studying a variational problem. In fact, we study the energy,
+
+$$(f(x),\sqrt{m^2c^4-c^2\Delta}f(x))\tag{3}$$
+
+which makes sense when $f$ is only in $H^{1/2}$, whereas operating on $f$ as in (2) requires $f\in H^1$ (since (2) needs to be in $L^2$). This amounts to a weakening of the weak differentiability requirements of a function we input into the energy (3). We say $f$ is in the "form domain" of the Klein-Gordon operator. 
+
+## Application to Dirac
+
+The purpose of this post is not to give a complete exposition of the free Dirac operator; this is just a quick application of fractional operators to the operator I study every day. Let $D$ denote the free Dirac operator with normalized units,
+
+$$D_c:=-i\pmb{\alpha}\cdot\nabla+\beta$$
+
+where the three-vector $\pmb{\alpha}$ has components $\begin{pmatrix}0&\pmb{\sigma}_j\\\pmb{\sigma}_j&0\end{pmatrix}$, $\pmb{\sigma}_j$ being the usual Pauli matrices. $\beta:=\begin{pmatrix}1&0\\0&-1\end{pmatrix}$. Thus, $D$ operators on 4-spinors. 
+
+The Dirac operator, under the Foldy-Wouthuysen Transformation, takes the form,
+
+$$\begin{pmatrix}\sqrt{1-\Delta}&&0\\0&&-\sqrt{1-\Delta}\end{pmatrix}\tag{4}$$
+
+This makes it easy to see that the form domain of the Dirac operator is $H^{1/2}(\mathbb{R}^3;\mathbb{C}^4)$. The Klein-Gordon equations arise in (4) from the fact that $|D|=\sqrt{1-\Delta}$. In fact, if we consider the energy of a particle under the influence of Dirac, we may write,
+
+$$(\psi,H\psi)_2=(\psi^+,H\psi^+)_2+(\psi^-,H\psi^-)_2$$
+
+Here, $\psi=\psi^++\psi^-$ where $\psi^+$ lies in the positive spectral subspace induced by $D$ and $\psi^-$ lies in the negative spectral subspace. Since $(\psi^+,H\psi^+)=(\psi^+,|H|\psi^+)$ and $(\psi^-,H\psi^-)=-(\psi^-,|H|\psi^-)$, we have,
+
+$$(\psi,H\psi)_2=||\psi^+||_{H^{1/2}}^2-||\psi^-||_{H^{1/2}}^2$$
+
+so that the energy may be written entirely in terms of the $H^{1/2}$ norm of the positive and negative spectral components of $\psi$. 
+
+In the analysis of energy functionals based on Dirac (say, the Dirac-Fock energy), it turns out that the best way to prove the existence of critical points is to search for weak critical points; that is, the critical points are in the form domain $H^{1/2}$ [@esteban_solutions_1999]. Afterwards, one may recover some regularity of the solutions and, in fact, the self-adjointness of the Dirac operator perturbed by the Coulomb may be used to prove that the solutions are in fact in $H^1$ [@esteban_nonrelativistic_2001]. 
