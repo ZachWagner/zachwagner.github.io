@@ -222,7 +222,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="simple-neural-network-solution" class="level3">
 <h3 class="anchored" data-anchor-id="simple-neural-network-solution">Simple Neural Network Solution</h3>
 <p>First, I will use a simple neural network with a single hidden layer. It doesn’t need to be very wide to get pretty good convergence to the solution. Here’s the architecture I use:</p>
-<div class="cell" data-execution_count="2">
+<div class="cell" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch.nn <span class="im">as</span> nn</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
@@ -232,21 +232,22 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy <span class="im">import</span> integrate</span>
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy <span class="im">import</span> constants</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-execution_count="3">
+<div class="cell" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> NeuralNetwork(nn.Module):</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>):</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>        <span class="bu">super</span>().<span class="fu">__init__</span>()</span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.sequential_model <span class="op">=</span> nn.Sequential(</span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>            nn.Linear(<span class="dv">3</span>, <span class="dv">8</span>),</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>            nn.Sigmoid(),</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>            nn.Linear(<span class="dv">8</span>, <span class="dv">1</span>)</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>        )</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> forward(<span class="va">self</span>, x):</span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">self</span>.sequential_model(x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>            <span class="co">#nn.Linear(1, 8),</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>            nn.Sigmoid(),</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>            nn.Linear(<span class="dv">8</span>, <span class="dv">1</span>)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> forward(<span class="va">self</span>, x):</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">self</span>.sequential_model(x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Below is my data sampler function, simililar to the data sampler I used in my post on the Poisson equation. I sample 10000 points in my example and proceed to solve the equation for <span class="math inline">\(t\in\left[0,0.09\right]\)</span>.</p>
-<div class="cell" data-execution_count="5">
+<div class="cell" data-execution_count="30">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> SampleFromUnitCube(points):</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    d <span class="op">=</span> torch.distributions.Uniform(<span class="op">-</span><span class="dv">5</span>,<span class="dv">5</span>)</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    d_t <span class="op">=</span> torch.distributions.Uniform(<span class="dv">0</span>,<span class="fl">0.1</span>)</span>
@@ -283,7 +284,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> x, y, z</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-execution_count="6">
+<div class="cell" data-execution_count="31">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>x, y, z <span class="op">=</span> SampleFromUnitCube(<span class="dv">10000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The loss function is very similar to what we used in our Poisson solver. Again, I use a discrete mean-squared error function to compute the loss. In this case, I want to minimize the following,</p>
@@ -293,137 +294,157 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 \]</span></p>
 <p>where <span class="math inline">\(g(x,y):=\exp\left(-\frac{1}{1-(x^2+y^2)}\right)\)</span>.</p>
 <p>To implement this loss function, I use the following code:</p>
-<div class="cell" data-execution_count="13">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> v(x,y,z):</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="op">-</span>constants.fine_structure<span class="op">/</span>torch.sqrt(x<span class="op">**</span><span class="dv">2</span><span class="op">+</span>y<span class="op">**</span><span class="dv">2</span><span class="op">+</span>z<span class="op">**</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
 <div class="cell" data-execution_count="19">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> loss(x, y, z, network):</span>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> v(x,y,z):</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="op">-</span><span class="dv">1</span><span class="op">/</span>torch.sqrt(x<span class="op">**</span><span class="dv">2</span><span class="op">+</span>y<span class="op">**</span><span class="dv">2</span><span class="op">+</span>z<span class="op">**</span><span class="dv">2</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co">#def v(x):</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co">#    return -1/torch.abs(x)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="85">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> loss(x, network):</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    x.requires_grad <span class="op">=</span> <span class="va">True</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    y.requires_grad <span class="op">=</span> <span class="va">True</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    z.requires_grad <span class="op">=</span> <span class="va">True</span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    temp_input <span class="op">=</span> torch.cat((x,y,z),<span class="dv">1</span>)</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    w<span class="op">=</span>network(temp_input)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    w<span class="op">=</span>network(x)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="co">#w=output[0,0]</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">#eig=output[0,1]</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    <span class="co">#integral, integral_error = integrate.nquad(network_function,[[-5,5],[-5,5],[-5,5]])</span></span>
 <span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    integral, integral_error <span class="op">=</span> integrate.nquad(network_function,[[<span class="op">-</span><span class="dv">5</span>,<span class="dv">5</span>],[<span class="op">-</span><span class="dv">5</span>,<span class="dv">5</span>],[<span class="op">-</span><span class="dv">5</span>,<span class="dv">5</span>]])</span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    <span class="co">#this integral is not correct (duh!)</span></span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    <span class="co">#integral = (w[1:]**2)*delta_x[1:]*delta_y[1:]*delta_z[1:]</span></span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>    dw_dx <span class="op">=</span> torch.autograd.grad(w.<span class="bu">sum</span>(), x, create_graph <span class="op">=</span> <span class="va">True</span>)[<span class="dv">0</span>]</span>
-<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>    ddw_ddx <span class="op">=</span> torch.autograd.grad(dw_dx.<span class="bu">sum</span>(), x, create_graph <span class="op">=</span> <span class="va">True</span>)[<span class="dv">0</span>]</span>
-<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>    dw_dy <span class="op">=</span> torch.autograd.grad(w.<span class="bu">sum</span>(), y, create_graph <span class="op">=</span> <span class="va">True</span>)[<span class="dv">0</span>] </span>
-<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>    ddw_ddy <span class="op">=</span> torch.autograd.grad(dw_dy.<span class="bu">sum</span>(), y, create_graph <span class="op">=</span> <span class="va">True</span>)[<span class="dv">0</span>]</span>
-<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>    dw_dz <span class="op">=</span> torch.autograd.grad(w.<span class="bu">sum</span>(), z, create_graph <span class="op">=</span> <span class="va">True</span>)[<span class="dv">0</span>] </span>
-<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>    ddw_ddz <span class="op">=</span> torch.autograd.grad(dw_dz.<span class="bu">sum</span>(), z, create_graph <span class="op">=</span> <span class="va">True</span>)[<span class="dv">0</span>]</span>
-<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>    A <span class="op">=</span> torch.mean((<span class="op">-</span>(ddw_ddx<span class="op">+</span>ddw_ddy<span class="op">+</span>ddw_ddz)<span class="op">-</span>v(x,y,z)<span class="op">*</span>w<span class="op">+</span><span class="dv">1</span><span class="op">/</span><span class="dv">2</span><span class="op">*</span>w)<span class="op">**</span><span class="dv">2</span>)</span>
-<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>    B <span class="op">=</span> (integral<span class="op">-</span><span class="dv">1</span>)<span class="op">**</span><span class="dv">2</span></span>
-<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>    <span class="co">#print("Loss A: {}, loss B: {}".format(A,B))</span></span>
-<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> A<span class="op">+</span>B</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    <span class="co">#this integral is not correct (duh!)</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    <span class="co">#integral = (w[1:]**2)*delta_x[1:]*delta_y[1:]*delta_z[1:]</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    dw_dx <span class="op">=</span> torch.autograd.grad(w.<span class="bu">sum</span>(), x, create_graph <span class="op">=</span> <span class="va">True</span>)[<span class="dv">0</span>]</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    ddw_ddx <span class="op">=</span> torch.autograd.grad(dw_dx.<span class="bu">sum</span>(), x, create_graph <span class="op">=</span> <span class="va">True</span>)[<span class="dv">0</span>]</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>    A <span class="op">=</span> torch.mean((<span class="op">-</span>(ddw_ddx)<span class="op">-</span><span class="dv">2</span><span class="op">/</span>x<span class="op">*</span>dw_dx<span class="op">+</span>v(x)<span class="op">*</span>w<span class="op">+</span><span class="dv">1</span><span class="op">/</span><span class="dv">4</span><span class="op">*</span>w)<span class="op">**</span><span class="dv">2</span>)</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>    <span class="co">#B = (integral-1)**2</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>    <span class="co">#print("Loss A: {}, loss B: {}".format(A,B))</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> A<span class="co">#+B</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-execution_count="27">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>network_function(<span class="fl">0.1</span>,<span class="fl">0.1</span>,<span class="fl">0.1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="27">
-<pre><code>tensor([[5.3251e-05]], grad_fn=&lt;PowBackward0&gt;)</code></pre>
+<div class="cell" data-execution_count="32">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> loss2(x, y, z, network):</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    x.requires_grad <span class="op">=</span> <span class="va">True</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    y.requires_grad <span class="op">=</span> <span class="va">True</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    z.requires_grad <span class="op">=</span> <span class="va">True</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    temp_input <span class="op">=</span> torch.cat((x,y,z),<span class="dv">1</span>)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    w<span class="op">=</span>network(temp_input)</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    <span class="co">#w=output[0,0]</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    <span class="co">#eig=output[0,1]</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    <span class="co">#integral, integral_error = integrate.nquad(network_function,[[-5,5],[-5,5],[-5,5]])</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>    <span class="co">#this integral is not correct (duh!)</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>    <span class="co">#integral = (w[1:]**2)*delta_x[1:]*delta_y[1:]*delta_z[1:]</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>    dw_dx <span class="op">=</span> torch.autograd.grad(w.<span class="bu">sum</span>(), x, create_graph <span class="op">=</span> <span class="va">True</span>)[<span class="dv">0</span>]</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>    ddw_ddx <span class="op">=</span> torch.autograd.grad(dw_dx.<span class="bu">sum</span>(), x, create_graph <span class="op">=</span> <span class="va">True</span>)[<span class="dv">0</span>]</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>    dw_dy <span class="op">=</span> torch.autograd.grad(w.<span class="bu">sum</span>(), y, create_graph <span class="op">=</span> <span class="va">True</span>)[<span class="dv">0</span>] </span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>    ddw_ddy <span class="op">=</span> torch.autograd.grad(dw_dy.<span class="bu">sum</span>(), y, create_graph <span class="op">=</span> <span class="va">True</span>)[<span class="dv">0</span>]</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>    dw_dz <span class="op">=</span> torch.autograd.grad(w.<span class="bu">sum</span>(), z, create_graph <span class="op">=</span> <span class="va">True</span>)[<span class="dv">0</span>] </span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>    ddw_ddz <span class="op">=</span> torch.autograd.grad(dw_dz.<span class="bu">sum</span>(), z, create_graph <span class="op">=</span> <span class="va">True</span>)[<span class="dv">0</span>]</span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>    A <span class="op">=</span> torch.mean((<span class="op">-</span>(ddw_ddx<span class="op">+</span>ddw_ddy<span class="op">+</span>ddw_ddz)<span class="op">+</span>v(x,y,z)<span class="op">*</span>w<span class="op">+</span><span class="dv">1</span><span class="op">/</span><span class="dv">4</span><span class="op">*</span>w)<span class="op">**</span><span class="dv">2</span>)</span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>    <span class="co">#B = (integral-1)**2</span></span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>    <span class="co">#print("Loss A: {}, loss B: {}".format(A,B))</span></span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> A<span class="co">#+B</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>network_function(<span class="fl">0.1</span>,<span class="fl">0.1</span>,<span class="fl">0.1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="14">
+<pre><code>tensor([[-0.4386]], grad_fn=&lt;AddmmBackward0&gt;)</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="11">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> network_function(x, y, z):</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    x_input <span class="op">=</span> torch.tensor([[x]]).<span class="bu">float</span>()</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    y_input <span class="op">=</span> torch.tensor([[y]]).<span class="bu">float</span>()</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    z_input <span class="op">=</span> torch.tensor([[z]]).<span class="bu">float</span>()</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    temp_input <span class="op">=</span> torch.cat((x_input,y_input,z_input),<span class="dv">1</span>)</span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> model(temp_input)<span class="op">**</span><span class="dv">2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="57">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> network_function(x, y, z):</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    x_input <span class="op">=</span> torch.tensor([[x]]).<span class="bu">float</span>()</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    y_input <span class="op">=</span> torch.tensor([[y]]).<span class="bu">float</span>()</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    z_input <span class="op">=</span> torch.tensor([[z]]).<span class="bu">float</span>()</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    temp_input <span class="op">=</span> torch.cat((x_input,y_input,z_input),<span class="dv">1</span>)</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> model(temp_input)<span class="op">**</span><span class="dv">2</span><span class="co">#[0,0]**2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Now I train the network. I use 100000 epochs to get pretty good convergence.</p>
-<div class="cell" data-execution_count="36">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> NeuralNetwork()</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>optimizer <span class="op">=</span> torch.optim.SGD(model.parameters(), lr<span class="op">=</span><span class="fl">0.01</span>)<span class="co">#, momentum=.9)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="33">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> NeuralNetwork()</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>optimizer <span class="op">=</span> torch.optim.SGD(model.parameters(), lr<span class="op">=</span><span class="fl">.01</span>)<span class="co">#, momentum=10)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-execution_count="41">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>epochs <span class="op">=</span> <span class="dv">1000</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>loss_values <span class="op">=</span> np.zeros(<span class="dv">1000</span>)</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(epochs):</span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    l <span class="op">=</span> loss(x, y, z, model)</span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    l.backward()</span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    optimizer.step()</span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    optimizer.zero_grad()</span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>    loss_values[i]<span class="op">=</span>l</span>
-<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> i<span class="op">%</span><span class="dv">10</span><span class="op">==</span><span class="dv">0</span>:</span>
-<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">"Loss at epoch </span><span class="sc">{}</span><span class="st">: </span><span class="sc">{}</span><span class="st">"</span>.<span class="bu">format</span>(i, l.item()))</span>
-<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> l<span class="op">&lt;</span><span class="fl">0.001</span>:</span>
-<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">break</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="34">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>epochs <span class="op">=</span> <span class="dv">1000</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>loss_values <span class="op">=</span> np.zeros(<span class="dv">10000</span>)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(epochs):</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    l <span class="op">=</span> loss2(x,y,z, model)</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    l.backward()</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>    optimizer.step()</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>    optimizer.zero_grad()</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>    loss_values[i]<span class="op">=</span>l</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> i<span class="op">%</span><span class="dv">10</span><span class="op">==</span><span class="dv">0</span>:</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">"Loss at epoch </span><span class="sc">{}</span><span class="st">: </span><span class="sc">{}</span><span class="st">"</span>.<span class="bu">format</span>(i, l.item()))</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> l<span class="op">&lt;</span><span class="fl">0.001</span>:</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">break</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Loss at epoch 0: 0.15813612937927246
-Loss at epoch 10: 0.14409492909908295
-Loss at epoch 20: 0.13101883232593536
-Loss at epoch 30: 0.11885140836238861
-Loss at epoch 40: 0.10754197090864182
-Loss at epoch 50: 0.0970413088798523
-Loss at epoch 60: 0.08730383962392807
-Loss at epoch 70: 0.07828652113676071
-Loss at epoch 80: 0.06994932889938354
-Loss at epoch 90: 0.06225388124585152
-Loss at epoch 100: 0.0551644004881382
-Loss at epoch 110: 0.04864714294672012
-Loss at epoch 120: 0.04267009347677231
-Loss at epoch 130: 0.03720393031835556
-Loss at epoch 140: 0.03221976011991501
-Loss at epoch 150: 0.027691060677170753
-Loss at epoch 160: 0.023593122139573097
-Loss at epoch 170: 0.01990196667611599
-Loss at epoch 180: 0.01659516617655754
-Loss at epoch 190: 0.013651831075549126
-Loss at epoch 200: 0.011051819659769535
-Loss at epoch 210: 0.008776054717600346
-Loss at epoch 220: 0.006806639488786459
-Loss at epoch 230: 0.0051268283277750015
-Loss at epoch 240: 0.003720469307154417
-Loss at epoch 250: 0.002572300611063838
-Loss at epoch 260: 0.0016681343549862504
-Loss at epoch 270: 0.0009942336473613977</code></pre>
+<pre><code>Loss at epoch 0: 0.00040684660780243576</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="36">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>model(torch.cat((x,y,z),<span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="36">
+<pre><code>tensor([[-0.0700],
+        [ 0.0174],
+        [-0.0904],
+        ...,
+        [ 0.0868],
+        [-0.1886],
+        [ 0.1267]], grad_fn=&lt;AddmmBackward0&gt;)</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="37">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>torch.exp(<span class="op">-</span><span class="dv">1</span><span class="op">/</span><span class="dv">2</span><span class="op">*</span>torch.<span class="bu">abs</span>(x))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="37">
+<pre><code>tensor([[0.1967],
+        [0.2248],
+        [0.5284],
+        ...,
+        [0.4093],
+        [0.3726],
+        [0.7957]], grad_fn=&lt;ExpBackward0&gt;)</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="44">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>x_axis <span class="op">=</span> np.linspace(<span class="dv">0</span>,<span class="dv">1000</span>,<span class="dv">1000</span>)[:,<span class="va">None</span>]</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">5</span>,<span class="dv">3</span>))</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>plt.plot(x_axis,loss_values,<span class="st">'red'</span>, label<span class="op">=</span><span class="st">'loss'</span>)</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Iteration'</span>)</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Loss'</span>)</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>plt.legend()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>ValueError: x and y must have same first dimension, but have shapes (1000, 1) and (10000,)</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="Hydrogen Atom Ground State_files/figure-html/cell-15-output-2.png" class="img-fluid"></p>
 </div>
 </div>
 <div class="cell" data-execution_count="24">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>x_axis <span class="op">=</span> np.linspace(<span class="dv">0</span>,<span class="dv">1000</span>,<span class="dv">1000</span>)[:,<span class="va">None</span>]</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">5</span>,<span class="dv">3</span>))</span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>plt.plot(x_axis,loss_values,<span class="st">'red'</span>, label<span class="op">=</span><span class="st">'loss'</span>)</span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Iteration'</span>)</span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Loss'</span>)</span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>plt.legend()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="24">
-<pre><code>&lt;matplotlib.legend.Legend at 0x1087ddc90&gt;</code></pre>
-</div>
-<div class="cell-output cell-output-display">
-<p><img src="Hydrogen Atom Ground State_files/figure-html/cell-12-output-2.png" class="img-fluid"></p>
-</div>
-</div>
-<div class="cell" data-execution_count="42">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>x_test, y_test, z_test <span class="op">=</span> SampleFromUnitCube(<span class="dv">10000</span>)</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> torch.no_grad():</span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>    z <span class="op">=</span> model(torch.cat((x_test,y_test,z_test),<span class="dv">1</span>))</span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"Interior sup-norm error: </span><span class="sc">{}</span><span class="st">"</span>.<span class="bu">format</span>(torch.<span class="bu">max</span>(<span class="bu">abs</span>(z)).item()))</span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="co">#with torch.no_grad():</span></span>
-<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>    <span class="co">#z = model(torch.cat((xbdry_test,ybdry_test),1))-(1/4*(xbdry_test**2+ybdry_test**2-1))</span></span>
-<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>    <span class="co">#print("Boundary sup-norm error: {}".format(torch.max(abs(z)).item()))</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>x_test, y_test, z_test <span class="op">=</span> SampleFromUnitCube(<span class="dv">10000</span>)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> torch.no_grad():</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>    z <span class="op">=</span> model(torch.cat((x_test,y_test,z_test),<span class="dv">1</span>))</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"Interior sup-norm error: </span><span class="sc">{}</span><span class="st">"</span>.<span class="bu">format</span>(torch.<span class="bu">max</span>(torch.<span class="bu">abs</span>(<span class="bu">abs</span>(z<span class="op">-</span>torch.exp(<span class="op">-</span><span class="dv">1</span><span class="op">/</span><span class="dv">2</span><span class="op">*</span>torch.sqrt(x_test<span class="op">**</span><span class="dv">2</span><span class="op">+</span>y_test<span class="op">**</span><span class="dv">2</span><span class="op">+</span>z_test<span class="op">**</span><span class="dv">2</span>))))).item()))</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a><span class="co">#with torch.no_grad():</span></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>    <span class="co">#z = model(torch.cat((xbdry_test,ybdry_test),1))-(1/4*(xbdry_test**2+ybdry_test**2-1))</span></span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>    <span class="co">#print("Boundary sup-norm error: {}".format(torch.max(abs(z)).item()))</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Interior sup-norm error: 0.08070254325866699</code></pre>
+<pre><code>Interior sup-norm error: 0.9457930326461792</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="43">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>integral, integral_error <span class="op">=</span> integrate.nquad(network_function,[[<span class="op">-</span><span class="dv">5</span>,<span class="dv">5</span>],[<span class="op">-</span><span class="dv">5</span>,<span class="dv">5</span>],[<span class="op">-</span><span class="dv">5</span>,<span class="dv">5</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="60">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>integral, integral_error <span class="op">=</span> integrate.nquad(network_function,[[<span class="op">-</span><span class="dv">5</span>,<span class="dv">5</span>],[<span class="op">-</span><span class="dv">5</span>,<span class="dv">5</span>],[<span class="op">-</span><span class="dv">5</span>,<span class="dv">5</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-execution_count="44">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>integral</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="44">
-<pre><code>1.026555540473367</code></pre>
+<div class="cell" data-execution_count="61">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>integral</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="61">
+<pre><code>10.550146815315662</code></pre>
 </div>
 </div>
 <div class="cell" data-execution_count="53">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>r_2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>r_2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="53">
 <pre><code>tensor([[ 9.1427],
         [39.5953],
@@ -434,75 +455,130 @@ Loss at epoch 270: 0.0009942336473613977</code></pre>
         [47.4440]])</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="55">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>x_test, y_test, z_test <span class="op">=</span> SampleFromUnitCube(<span class="dv">10000</span>)</span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> torch.no_grad():</span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>    z <span class="op">=</span> model(torch.cat((x_test,y_test,z_test),<span class="dv">1</span>)).<span class="bu">abs</span>()</span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">5</span>,<span class="dv">3</span>))</span>
-<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>r_2 <span class="op">=</span> (x_test<span class="op">**</span><span class="dv">2</span><span class="op">+</span>y_test<span class="op">**</span><span class="dv">2</span><span class="op">+</span>z_test<span class="op">**</span><span class="dv">2</span>)<span class="op">**</span>(<span class="dv">1</span><span class="op">/</span><span class="dv">2</span>)</span>
-<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>plt.scatter(r_2,z)</span>
-<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'radius^2'</span>)</span>
-<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'wave function value'</span>)</span>
-<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>plt.legend()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="47">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>x_test, y_test, z_test <span class="op">=</span> SampleFromUnitCube(<span class="dv">10000</span>)</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> torch.no_grad():</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>    z <span class="op">=</span> model(torch.cat((x_test,y_test,z_test),<span class="dv">1</span>)).<span class="bu">abs</span>()</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">5</span>,<span class="dv">3</span>))</span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>r_2 <span class="op">=</span> (x_test<span class="op">**</span><span class="dv">2</span><span class="op">+</span>y_test<span class="op">**</span><span class="dv">2</span><span class="op">+</span>z_test<span class="op">**</span><span class="dv">2</span>)<span class="op">**</span>(<span class="dv">1</span><span class="op">/</span><span class="dv">2</span>)</span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>plt.scatter(r_2,z)</span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'radius^2'</span>)</span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'wave function value'</span>)</span>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a>plt.legend()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>No artists with labels found to put in legend.  Note that artists whose label start with an underscore are ignored when legend() is called with no argument.</code></pre>
 </div>
-<div class="cell-output cell-output-display" data-execution_count="55">
-<pre><code>&lt;matplotlib.legend.Legend at 0x14941f710&gt;</code></pre>
+<div class="cell-output cell-output-display" data-execution_count="47">
+<pre><code>&lt;matplotlib.legend.Legend at 0x31654fa50&gt;</code></pre>
 </div>
 <div class="cell-output cell-output-display">
-<p><img src="Hydrogen Atom Ground State_files/figure-html/cell-17-output-3.png" class="img-fluid"></p>
+<p><img src="Hydrogen Atom Ground State_files/figure-html/cell-20-output-3.png" class="img-fluid"></p>
 </div>
 </div>
 </section>
 </section>
 <section id="energy-functional-minimization" class="level1">
 <h1>Energy Functional Minimization</h1>
+<div class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>x, y, z</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="7">
+<pre><code>(tensor([[-2.4399],
+         [-0.3699],
+         [ 3.8232],
+         ...,
+         [ 0.9452],
+         [-4.9676],
+         [-2.9936]]),
+ tensor([[ 4.2813],
+         [-1.7174],
+         [ 3.8001],
+         ...,
+         [ 2.5628],
+         [-1.8721],
+         [-1.3494]]),
+ tensor([[-4.5001],
+         [ 0.8834],
+         [ 1.6381],
+         ...,
+         [-3.7412],
+         [ 2.7122],
+         [-4.2571]]))</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>x[<span class="dv">1</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="19">
+<pre><code>tensor([-0.3699])</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="29">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> trapezoid_rule(x,y,z):</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>    integral<span class="op">=</span><span class="dv">0</span></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>,x.size(<span class="dv">0</span>)<span class="op">-</span><span class="dv">1</span>):</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>,y.size(<span class="dv">0</span>)<span class="op">-</span><span class="dv">1</span>):</span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> k <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>,z.size(<span class="dv">0</span>)<span class="op">-</span><span class="dv">1</span>):</span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>                integral <span class="op">+=</span> <span class="dv">1</span><span class="op">/</span><span class="dv">2</span><span class="op">*</span>(network_function(x[i<span class="op">+</span><span class="dv">1</span>],y[j<span class="op">+</span><span class="dv">1</span>],z[k<span class="op">+</span><span class="dv">1</span>])<span class="op">-</span>network_function(x[i],y[j],z[k]))<span class="op">*</span>(z[k<span class="op">+</span><span class="dv">1</span>]<span class="op">-</span>z[k])<span class="op">*</span>(y[j<span class="op">+</span><span class="dv">1</span>]<span class="op">-</span>z[j])<span class="op">*</span>(x[i<span class="op">+</span><span class="dv">1</span>]<span class="op">-</span>x[i])</span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> integral</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="30">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>trapezoid_rule(x,y,z)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>KeyboardInterrupt: </code></pre>
+</div>
+</div>
 <div class="cell" data-execution_count="68">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> grad_network_squared(x, y, z):</span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>    x_input <span class="op">=</span> torch.tensor([[x]]).<span class="bu">float</span>()</span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>    x_input.requires_grad <span class="op">=</span> <span class="va">True</span></span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>    y_input <span class="op">=</span> torch.tensor([[y]]).<span class="bu">float</span>()</span>
-<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>    y_input.requires_grad <span class="op">=</span> <span class="va">True</span></span>
-<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>    z_input <span class="op">=</span> torch.tensor([[z]]).<span class="bu">float</span>()</span>
-<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>    z_input.requires_grad <span class="op">=</span> <span class="va">True</span></span>
-<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>    temp_input <span class="op">=</span> torch.cat((x_input,y_input,z_input),<span class="dv">1</span>)</span>
-<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>    w <span class="op">=</span> model(temp_input)</span>
-<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>    dw_dx <span class="op">=</span> torch.autograd.grad(w.<span class="bu">sum</span>(), x_input, create_graph <span class="op">=</span> <span class="va">True</span>)[<span class="dv">0</span>]</span>
-<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>    dw_dy <span class="op">=</span> torch.autograd.grad(w.<span class="bu">sum</span>(), y_input, create_graph <span class="op">=</span> <span class="va">True</span>)[<span class="dv">0</span>]</span>
-<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>    dw_dz <span class="op">=</span> torch.autograd.grad(w.<span class="bu">sum</span>(), z_input, create_graph <span class="op">=</span> <span class="va">True</span>)[<span class="dv">0</span>]</span>
-<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> dw_dx<span class="op">**</span><span class="dv">2</span><span class="op">+</span>dw_dy<span class="op">**</span><span class="dv">2</span><span class="op">+</span>dw_dz<span class="op">**</span><span class="dv">2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> integral_grad_network_squared(x, y, z, network):</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>    x.requires_grad <span class="op">=</span> <span class="va">True</span></span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>    y.requires_grad <span class="op">=</span> <span class="va">True</span></span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>    z.requires_grad <span class="op">=</span> <span class="va">True</span></span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>    temp_input <span class="op">=</span> torch.cat((x,y,z),<span class="dv">1</span>)</span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>    w <span class="op">=</span> network(temp_input)</span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>    <span class="co">#this integral is not correct (duh!)</span></span>
+<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a>    <span class="co">#integral = (w[1:]**2)*delta_x[1:]*delta_y[1:]*delta_z[1:]</span></span>
+<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a>    dw_dx <span class="op">=</span> torch.autograd.grad(w.<span class="bu">sum</span>(), x, create_graph <span class="op">=</span> <span class="va">True</span>)[<span class="dv">0</span>]</span>
+<span id="cb37-12"><a href="#cb37-12" aria-hidden="true" tabindex="-1"></a>    ddw_ddx <span class="op">=</span> torch.autograd.grad(dw_dx.<span class="bu">sum</span>(), x, create_graph <span class="op">=</span> <span class="va">True</span>)[<span class="dv">0</span>]</span>
+<span id="cb37-13"><a href="#cb37-13" aria-hidden="true" tabindex="-1"></a>    dw_dy <span class="op">=</span> torch.autograd.grad(w.<span class="bu">sum</span>(), y, create_graph <span class="op">=</span> <span class="va">True</span>)[<span class="dv">0</span>] </span>
+<span id="cb37-14"><a href="#cb37-14" aria-hidden="true" tabindex="-1"></a>    ddw_ddy <span class="op">=</span> torch.autograd.grad(dw_dy.<span class="bu">sum</span>(), y, create_graph <span class="op">=</span> <span class="va">True</span>)[<span class="dv">0</span>]</span>
+<span id="cb37-15"><a href="#cb37-15" aria-hidden="true" tabindex="-1"></a>    dw_dz <span class="op">=</span> torch.autograd.grad(w.<span class="bu">sum</span>(), z, create_graph <span class="op">=</span> <span class="va">True</span>)[<span class="dv">0</span>] </span>
+<span id="cb37-16"><a href="#cb37-16" aria-hidden="true" tabindex="-1"></a>    ddw_ddz <span class="op">=</span> torch.autograd.grad(dw_dz.<span class="bu">sum</span>(), z, create_graph <span class="op">=</span> <span class="va">True</span>)[<span class="dv">0</span>]</span>
+<span id="cb37-17"><a href="#cb37-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-18"><a href="#cb37-18" aria-hidden="true" tabindex="-1"></a>    grad_w <span class="op">=</span> dw_dx<span class="op">**</span><span class="dv">2</span><span class="op">+</span>dw_dy<span class="op">**</span><span class="dv">2</span><span class="op">+</span>dw_dz<span class="op">**</span><span class="dv">2</span></span>
+<span id="cb37-19"><a href="#cb37-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-20"><a href="#cb37-20" aria-hidden="true" tabindex="-1"></a>    A <span class="op">=</span> torch.trapz(grad_w,)</span>
+<span id="cb37-21"><a href="#cb37-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> dw_dx<span class="op">**</span><span class="dv">2</span><span class="op">+</span>dw_dy<span class="op">**</span><span class="dv">2</span><span class="op">+</span>dw_dz<span class="op">**</span><span class="dv">2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell" data-execution_count="69">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> potential_times_network(x, y, z):</span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>    x_input <span class="op">=</span> torch.tensor([[x]]).<span class="bu">float</span>()</span>
-<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>    y_input <span class="op">=</span> torch.tensor([[y]]).<span class="bu">float</span>()</span>
-<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>    z_input <span class="op">=</span> torch.tensor([[z]]).<span class="bu">float</span>()</span>
-<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>    temp_input <span class="op">=</span> torch.cat((x_input,y_input,z_input),<span class="dv">1</span>)</span>
-<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>    w <span class="op">=</span> model(temp_input)<span class="op">**</span><span class="dv">2</span></span>
-<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> w<span class="op">*</span>v(x_input,y_input,z_input)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> potential_times_network(x, y, z):</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>    x_input <span class="op">=</span> torch.tensor([[x]]).<span class="bu">float</span>()</span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>    y_input <span class="op">=</span> torch.tensor([[y]]).<span class="bu">float</span>()</span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>    z_input <span class="op">=</span> torch.tensor([[z]]).<span class="bu">float</span>()</span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>    temp_input <span class="op">=</span> torch.cat((x_input,y_input,z_input),<span class="dv">1</span>)</span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a>    w <span class="op">=</span> model(temp_input)<span class="op">**</span><span class="dv">2</span></span>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> w<span class="op">*</span>v(x_input,y_input,z_input)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell" data-execution_count="73">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> rr_functional(x, y, z, network):</span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>    x.requires_grad <span class="op">=</span> <span class="va">True</span></span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>    y.requires_grad <span class="op">=</span> <span class="va">True</span></span>
-<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>    z.requires_grad <span class="op">=</span> <span class="va">True</span></span>
-<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>    temp_input <span class="op">=</span> torch.cat((x,y,z),<span class="dv">1</span>)</span>
-<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>    w<span class="op">=</span>network(temp_input)</span>
-<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>    integral, integral_error <span class="op">=</span> integrate.nquad(network_function,[[<span class="op">-</span><span class="dv">5</span>,<span class="dv">5</span>],[<span class="op">-</span><span class="dv">5</span>,<span class="dv">5</span>],[<span class="op">-</span><span class="dv">5</span>,<span class="dv">5</span>]])</span>
-<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>    A, A_error <span class="op">=</span> integrate.nquad(grad_network_squared,[[<span class="op">-</span><span class="dv">5</span>,<span class="dv">5</span>],[<span class="op">-</span><span class="dv">5</span>,<span class="dv">5</span>],[<span class="op">-</span><span class="dv">5</span>,<span class="dv">5</span>]])</span>
-<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>    B, B_error <span class="op">=</span> integrate.nquad(potential_times_network,[[<span class="op">-</span><span class="dv">5</span>,<span class="dv">5</span>],[<span class="op">-</span><span class="dv">5</span>,<span class="dv">5</span>],[<span class="op">-</span><span class="dv">5</span>,<span class="dv">5</span>]])</span>
-<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (A<span class="op">-</span>B)<span class="op">/</span>integral</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> rr_functional(x, y, z, network):</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>    x.requires_grad <span class="op">=</span> <span class="va">True</span></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>    y.requires_grad <span class="op">=</span> <span class="va">True</span></span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>    z.requires_grad <span class="op">=</span> <span class="va">True</span></span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>    temp_input <span class="op">=</span> torch.cat((x,y,z),<span class="dv">1</span>)</span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a>    w<span class="op">=</span>network(temp_input)</span>
+<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a>    integral, integral_error <span class="op">=</span> integrate.nquad(network_function,[[<span class="op">-</span><span class="dv">5</span>,<span class="dv">5</span>],[<span class="op">-</span><span class="dv">5</span>,<span class="dv">5</span>],[<span class="op">-</span><span class="dv">5</span>,<span class="dv">5</span>]])</span>
+<span id="cb39-9"><a href="#cb39-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-10"><a href="#cb39-10" aria-hidden="true" tabindex="-1"></a>    A, A_error <span class="op">=</span> integrate.nquad(grad_network_squared,[[<span class="op">-</span><span class="dv">5</span>,<span class="dv">5</span>],[<span class="op">-</span><span class="dv">5</span>,<span class="dv">5</span>],[<span class="op">-</span><span class="dv">5</span>,<span class="dv">5</span>]])</span>
+<span id="cb39-11"><a href="#cb39-11" aria-hidden="true" tabindex="-1"></a>    B, B_error <span class="op">=</span> integrate.nquad(potential_times_network,[[<span class="op">-</span><span class="dv">5</span>,<span class="dv">5</span>],[<span class="op">-</span><span class="dv">5</span>,<span class="dv">5</span>],[<span class="op">-</span><span class="dv">5</span>,<span class="dv">5</span>]])</span>
+<span id="cb39-12"><a href="#cb39-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-13"><a href="#cb39-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (A<span class="op">-</span>B)<span class="op">/</span>integral</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell" data-execution_count="76">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>rr_functional(x,y,z,model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>rr_functional(x,y,z,model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>/opt/homebrew/lib/python3.11/site-packages/scipy/integrate/_quadpack_py.py:1233: IntegrationWarning: The occurrence of roundoff error is detected, which prevents 
   the requested tolerance from being achieved.  The error may be 
@@ -514,20 +590,20 @@ Loss at epoch 270: 0.0009942336473613977</code></pre>
 </div>
 </div>
 <div class="cell" data-execution_count="74">
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> NeuralNetwork()</span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>optimizer <span class="op">=</span> torch.optim.SGD(model.parameters(), lr<span class="op">=</span><span class="fl">0.01</span>)<span class="co">#, momentum=.9)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> NeuralNetwork()</span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>optimizer <span class="op">=</span> torch.optim.SGD(model.parameters(), lr<span class="op">=</span><span class="fl">0.01</span>)<span class="co">#, momentum=.9)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell" data-execution_count="75">
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>epochs <span class="op">=</span> <span class="dv">1000</span></span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>loss_values <span class="op">=</span> np.zeros(<span class="dv">1000</span>)</span>
-<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(epochs):</span>
-<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>    l <span class="op">=</span> rr_functional(x, y, z, model)</span>
-<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>    l.backward()</span>
-<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>    optimizer.step()</span>
-<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>    optimizer.zero_grad()</span>
-<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>    loss_values[i]<span class="op">=</span>l</span>
-<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> i<span class="op">%</span><span class="dv">10</span><span class="op">==</span><span class="dv">0</span>:</span>
-<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">"Loss at epoch </span><span class="sc">{}</span><span class="st">: </span><span class="sc">{}</span><span class="st">"</span>.<span class="bu">format</span>(i, l.item()))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>epochs <span class="op">=</span> <span class="dv">1000</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>loss_values <span class="op">=</span> np.zeros(<span class="dv">1000</span>)</span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(epochs):</span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>    l <span class="op">=</span> rr_functional(x, y, z, model)</span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a>    l.backward()</span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a>    optimizer.step()</span>
+<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a>    optimizer.zero_grad()</span>
+<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a>    loss_values[i]<span class="op">=</span>l</span>
+<span id="cb44-9"><a href="#cb44-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> i<span class="op">%</span><span class="dv">10</span><span class="op">==</span><span class="dv">0</span>:</span>
+<span id="cb44-10"><a href="#cb44-10" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">"Loss at epoch </span><span class="sc">{}</span><span class="st">: </span><span class="sc">{}</span><span class="st">"</span>.<span class="bu">format</span>(i, l.item()))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>/opt/homebrew/lib/python3.11/site-packages/scipy/integrate/_quadpack_py.py:1233: IntegrationWarning: The occurrence of roundoff error is detected, which prevents 
   the requested tolerance from being achieved.  The error may be 
@@ -540,219 +616,219 @@ Loss at epoch 270: 0.0009942336473613977</code></pre>
 </div>
 <p>Evidently, one doesn’t need many input features, nor does one need a very wide network to get pretty good convergence. Moreover, I demonstrate the heat flow in the unit circle using the following plots and animation. Here, I’ve plotted a few instances of the solution over test data and three points in time in <span class="math inline">\(\left[0,0.09\right]\)</span>. Brighter colored scatter points indicate a higher value for <span class="math inline">\(u(x,y,t)\)</span>. As expected, the maximum value for <span class="math inline">\(u(x,y,t)\)</span> decreases as time progresses, and the heat diffuses to be nearly constant.</p>
 <div class="cell" data-execution_count="44">
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>x_test, y_test, z_test, xbdry_test, ybdry_test, zbdry_test <span class="op">=</span> SampleFromUnitBall(<span class="dv">10000</span>)</span>
-<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> plot_points(time_index):</span>
-<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> torch.no_grad():</span>
-<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>        temp_input <span class="op">=</span> torch.cat((x_test,y_test,torch.ones(<span class="dv">10000</span>).unsqueeze(<span class="dv">1</span>)<span class="op">*</span>time_index<span class="op">/</span><span class="dv">100</span>),<span class="dv">1</span>)</span>
-<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>        soln<span class="op">=</span>model(temp_input)</span>
-<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>    plt.scatter(x<span class="op">=</span>x_test.detach(),y<span class="op">=</span>y_test.detach(),c<span class="op">=</span>soln.detach(), vmin<span class="op">=</span><span class="dv">0</span>, vmax<span class="op">=</span><span class="fl">0.35</span>)</span>
-<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a>    plt.title(<span class="st">"Solution at time index "</span> <span class="op">+</span> <span class="bu">str</span>(time_index))</span>
-<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a>    plt.xlabel(<span class="st">"x-axis"</span>)</span>
-<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a>    plt.ylabel(<span class="st">"y-axis"</span>)</span>
-<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a>    plt.show()</span>
-<span id="cb35-12"><a href="#cb35-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb35-13"><a href="#cb35-13" aria-hidden="true" tabindex="-1"></a>plot_points(<span class="dv">0</span>)</span>
-<span id="cb35-14"><a href="#cb35-14" aria-hidden="true" tabindex="-1"></a>plot_points(<span class="dv">3</span>)</span>
-<span id="cb35-15"><a href="#cb35-15" aria-hidden="true" tabindex="-1"></a>plot_points(<span class="dv">9</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>x_test, y_test, z_test, xbdry_test, ybdry_test, zbdry_test <span class="op">=</span> SampleFromUnitBall(<span class="dv">10000</span>)</span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> plot_points(time_index):</span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> torch.no_grad():</span>
+<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a>        temp_input <span class="op">=</span> torch.cat((x_test,y_test,torch.ones(<span class="dv">10000</span>).unsqueeze(<span class="dv">1</span>)<span class="op">*</span>time_index<span class="op">/</span><span class="dv">100</span>),<span class="dv">1</span>)</span>
+<span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a>        soln<span class="op">=</span>model(temp_input)</span>
+<span id="cb47-7"><a href="#cb47-7" aria-hidden="true" tabindex="-1"></a>    plt.scatter(x<span class="op">=</span>x_test.detach(),y<span class="op">=</span>y_test.detach(),c<span class="op">=</span>soln.detach(), vmin<span class="op">=</span><span class="dv">0</span>, vmax<span class="op">=</span><span class="fl">0.35</span>)</span>
+<span id="cb47-8"><a href="#cb47-8" aria-hidden="true" tabindex="-1"></a>    plt.title(<span class="st">"Solution at time index "</span> <span class="op">+</span> <span class="bu">str</span>(time_index))</span>
+<span id="cb47-9"><a href="#cb47-9" aria-hidden="true" tabindex="-1"></a>    plt.xlabel(<span class="st">"x-axis"</span>)</span>
+<span id="cb47-10"><a href="#cb47-10" aria-hidden="true" tabindex="-1"></a>    plt.ylabel(<span class="st">"y-axis"</span>)</span>
+<span id="cb47-11"><a href="#cb47-11" aria-hidden="true" tabindex="-1"></a>    plt.show()</span>
+<span id="cb47-12"><a href="#cb47-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-13"><a href="#cb47-13" aria-hidden="true" tabindex="-1"></a>plot_points(<span class="dv">0</span>)</span>
+<span id="cb47-14"><a href="#cb47-14" aria-hidden="true" tabindex="-1"></a>plot_points(<span class="dv">3</span>)</span>
+<span id="cb47-15"><a href="#cb47-15" aria-hidden="true" tabindex="-1"></a>plot_points(<span class="dv">9</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<p><img src="Hydrogen Atom Ground State_files/figure-html/cell-24-output-1.png" class="img-fluid"></p>
+<p><img src="Hydrogen Atom Ground State_files/figure-html/cell-31-output-1.png" class="img-fluid"></p>
 </div>
 <div class="cell-output cell-output-display">
-<p><img src="Hydrogen Atom Ground State_files/figure-html/cell-24-output-2.png" class="img-fluid"></p>
+<p><img src="Hydrogen Atom Ground State_files/figure-html/cell-31-output-2.png" class="img-fluid"></p>
 </div>
 <div class="cell-output cell-output-display">
-<p><img src="Hydrogen Atom Ground State_files/figure-html/cell-24-output-3.png" class="img-fluid"></p>
+<p><img src="Hydrogen Atom Ground State_files/figure-html/cell-31-output-3.png" class="img-fluid"></p>
 </div>
 </div>
 <p>Running the cell below generates an animation of the solutions over time. I can even project the solutions past <span class="math inline">\(t=0.09\)</span> to show that the heat diffusion is accurately captured past our sample times.</p>
 <div class="cell" data-execution_count="56">
-<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>x_test, y_test, z_test, xbdry_test, ybdry_test, zbdry_test <span class="op">=</span> SampleFromUnitBall(<span class="dv">10000</span>)</span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots()</span>
-<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> k <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">20</span>):</span>
-<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> torch.no_grad():</span>
-<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>        temp_input <span class="op">=</span> torch.cat((x_test,y_test,torch.ones(<span class="dv">10000</span>).unsqueeze(<span class="dv">1</span>)<span class="op">*</span>k<span class="op">/</span><span class="dv">100</span>),<span class="dv">1</span>)</span>
-<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>        soln<span class="op">=</span>model(temp_input)</span>
-<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>    ax.cla()</span>
-<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>    ax.scatter(x<span class="op">=</span>x_test.detach(),y<span class="op">=</span>y_test.detach(),c<span class="op">=</span>soln.detach(), vmin<span class="op">=</span><span class="dv">0</span>, vmax<span class="op">=</span><span class="fl">0.35</span>)</span>
-<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a>    display(fig)</span>
-<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a>    clear_output(wait <span class="op">=</span> <span class="va">True</span>)</span>
-<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a>    plt.pause(<span class="fl">0.1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>x_test, y_test, z_test, xbdry_test, ybdry_test, zbdry_test <span class="op">=</span> SampleFromUnitBall(<span class="dv">10000</span>)</span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots()</span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> k <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">20</span>):</span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> torch.no_grad():</span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a>        temp_input <span class="op">=</span> torch.cat((x_test,y_test,torch.ones(<span class="dv">10000</span>).unsqueeze(<span class="dv">1</span>)<span class="op">*</span>k<span class="op">/</span><span class="dv">100</span>),<span class="dv">1</span>)</span>
+<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a>        soln<span class="op">=</span>model(temp_input)</span>
+<span id="cb48-7"><a href="#cb48-7" aria-hidden="true" tabindex="-1"></a>    ax.cla()</span>
+<span id="cb48-8"><a href="#cb48-8" aria-hidden="true" tabindex="-1"></a>    ax.scatter(x<span class="op">=</span>x_test.detach(),y<span class="op">=</span>y_test.detach(),c<span class="op">=</span>soln.detach(), vmin<span class="op">=</span><span class="dv">0</span>, vmax<span class="op">=</span><span class="fl">0.35</span>)</span>
+<span id="cb48-9"><a href="#cb48-9" aria-hidden="true" tabindex="-1"></a>    display(fig)</span>
+<span id="cb48-10"><a href="#cb48-10" aria-hidden="true" tabindex="-1"></a>    clear_output(wait <span class="op">=</span> <span class="va">True</span>)</span>
+<span id="cb48-11"><a href="#cb48-11" aria-hidden="true" tabindex="-1"></a>    plt.pause(<span class="fl">0.1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<p><img src="Hydrogen Atom Ground State_files/figure-html/cell-25-output-1.png" class="img-fluid"></p>
+<p><img src="Hydrogen Atom Ground State_files/figure-html/cell-32-output-1.png" class="img-fluid"></p>
 </div>
 </div>
 <section id="polynomial-regression-solution" class="level3">
 <h3 class="anchored" data-anchor-id="polynomial-regression-solution">Polynomial regression solution</h3>
 <p>Now, I sample a new set of points and construct a “neural network” which actually allows me to run polynomial regression using my loss function. I show that a degree four polynomial in the input features is suitable for an accurate approximation to a solution of the problem. Here, I take advantage of the fact that the initial condition is radial in its input and admits a nice Taylor expansion in the radial coordinate <span class="math inline">\(r^2=x^2+y^2\)</span>. Hence, an accurate approximation of the initial condition may be obtained by using a low-degree polynomial. Interestingly, even though the Taylor series only contains even powers of <span class="math inline">\(r\)</span>, including all odd degree terms seemed to improve convergence. Furthermore, the polynomial approximation converges much more rapidly to the actual solution than the nueral network. Essentially, the polynomial approximation contains far more “useful” features than the simple coordinate and time input features I used in the neural network input.</p>
 <div class="cell" data-execution_count="5">
-<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>x, y, t, xbdry, ybdry, tbdry <span class="op">=</span> SampleFromUnitBall(<span class="dv">10000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>x, y, t, xbdry, ybdry, tbdry <span class="op">=</span> SampleFromUnitBall(<span class="dv">10000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell" data-execution_count="6">
-<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> NeuralNetwork2(nn.Module):</span>
-<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>):</span>
-<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>        <span class="bu">super</span>().<span class="fu">__init__</span>()</span>
-<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.sequential_model <span class="op">=</span> nn.Sequential(</span>
-<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>            nn.Linear(<span class="dv">32</span>, <span class="dv">1</span>)</span>
-<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a>        )</span>
-<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> forward(<span class="va">self</span>, x):</span>
-<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">self</span>.sequential_model(x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> NeuralNetwork2(nn.Module):</span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>):</span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a>        <span class="bu">super</span>().<span class="fu">__init__</span>()</span>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.sequential_model <span class="op">=</span> nn.Sequential(</span>
+<span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a>            nn.Linear(<span class="dv">32</span>, <span class="dv">1</span>)</span>
+<span id="cb50-6"><a href="#cb50-6" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb50-7"><a href="#cb50-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-8"><a href="#cb50-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> forward(<span class="va">self</span>, x):</span>
+<span id="cb50-9"><a href="#cb50-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">self</span>.sequential_model(x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The loss function is really ugly since I need to compute all polynomial features and their derivatives. I wanted to use scikit-learn’s polynomial feature class, but this destroyed the derivative data in my tensors, so I’d have to create a polynomial feature class from scratch. I might do this in the future, but for now everything is hardcoded.</p>
 <div class="cell" data-execution_count="14">
-<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> loss2(x, y, t, xbdry, ybdry, tbdry, network):</span>
-<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>    x.requires_grad <span class="op">=</span> <span class="va">True</span></span>
-<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>    y.requires_grad <span class="op">=</span> <span class="va">True</span></span>
-<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>    t.requires_grad <span class="op">=</span> <span class="va">True</span></span>
-<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a>    <span class="co">#Here come all of the polynomial features....</span></span>
-<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a>    x_2 <span class="op">=</span> x<span class="op">**</span><span class="dv">2</span></span>
-<span id="cb39-9"><a href="#cb39-9" aria-hidden="true" tabindex="-1"></a>    y_2 <span class="op">=</span> y<span class="op">**</span><span class="dv">2</span></span>
-<span id="cb39-10"><a href="#cb39-10" aria-hidden="true" tabindex="-1"></a>    x_3 <span class="op">=</span> x<span class="op">**</span><span class="dv">3</span></span>
-<span id="cb39-11"><a href="#cb39-11" aria-hidden="true" tabindex="-1"></a>    y_3 <span class="op">=</span> y<span class="op">**</span><span class="dv">3</span></span>
-<span id="cb39-12"><a href="#cb39-12" aria-hidden="true" tabindex="-1"></a>    x_4 <span class="op">=</span> x<span class="op">**</span><span class="dv">4</span></span>
-<span id="cb39-13"><a href="#cb39-13" aria-hidden="true" tabindex="-1"></a>    y_4 <span class="op">=</span> y<span class="op">**</span><span class="dv">4</span></span>
-<span id="cb39-14"><a href="#cb39-14" aria-hidden="true" tabindex="-1"></a>    xy_2 <span class="op">=</span> x<span class="op">*</span>(y<span class="op">**</span><span class="dv">2</span>)</span>
-<span id="cb39-15"><a href="#cb39-15" aria-hidden="true" tabindex="-1"></a>    x_2y <span class="op">=</span> (x<span class="op">**</span><span class="dv">2</span>)<span class="op">*</span>y</span>
-<span id="cb39-16"><a href="#cb39-16" aria-hidden="true" tabindex="-1"></a>    xyt <span class="op">=</span> x<span class="op">*</span>y<span class="op">*</span>t</span>
-<span id="cb39-17"><a href="#cb39-17" aria-hidden="true" tabindex="-1"></a>    x_2t <span class="op">=</span> (x<span class="op">**</span><span class="dv">2</span>)<span class="op">*</span>t</span>
-<span id="cb39-18"><a href="#cb39-18" aria-hidden="true" tabindex="-1"></a>    y_2t <span class="op">=</span> (y<span class="op">**</span><span class="dv">2</span>)<span class="op">*</span>t</span>
-<span id="cb39-19"><a href="#cb39-19" aria-hidden="true" tabindex="-1"></a>    t_3 <span class="op">=</span> t<span class="op">**</span><span class="dv">3</span></span>
-<span id="cb39-20"><a href="#cb39-20" aria-hidden="true" tabindex="-1"></a>    t_4 <span class="op">=</span> t<span class="op">**</span><span class="dv">4</span></span>
-<span id="cb39-21"><a href="#cb39-21" aria-hidden="true" tabindex="-1"></a>    x_3y <span class="op">=</span> (x<span class="op">**</span><span class="dv">3</span>)<span class="op">*</span>y</span>
-<span id="cb39-22"><a href="#cb39-22" aria-hidden="true" tabindex="-1"></a>    xy_3 <span class="op">=</span> x<span class="op">*</span>(y<span class="op">**</span><span class="dv">3</span>)</span>
-<span id="cb39-23"><a href="#cb39-23" aria-hidden="true" tabindex="-1"></a>    x_2y_2 <span class="op">=</span> (x<span class="op">**</span><span class="dv">2</span>)<span class="op">*</span>(y<span class="op">**</span><span class="dv">2</span>)</span>
-<span id="cb39-24"><a href="#cb39-24" aria-hidden="true" tabindex="-1"></a>    x_3t <span class="op">=</span> (x<span class="op">**</span><span class="dv">3</span>)<span class="op">*</span>t</span>
-<span id="cb39-25"><a href="#cb39-25" aria-hidden="true" tabindex="-1"></a>    x_2t_2 <span class="op">=</span> (x<span class="op">**</span><span class="dv">2</span>)<span class="op">*</span>(t<span class="op">**</span><span class="dv">2</span>)</span>
-<span id="cb39-26"><a href="#cb39-26" aria-hidden="true" tabindex="-1"></a>    xt_3 <span class="op">=</span> x<span class="op">*</span>(t<span class="op">**</span><span class="dv">3</span>)</span>
-<span id="cb39-27"><a href="#cb39-27" aria-hidden="true" tabindex="-1"></a>    y_3t <span class="op">=</span> (y<span class="op">**</span><span class="dv">3</span>)<span class="op">*</span>t</span>
-<span id="cb39-28"><a href="#cb39-28" aria-hidden="true" tabindex="-1"></a>    y_2t_2 <span class="op">=</span> (y<span class="op">**</span><span class="dv">2</span>)<span class="op">*</span>(t<span class="op">**</span><span class="dv">2</span>)</span>
-<span id="cb39-29"><a href="#cb39-29" aria-hidden="true" tabindex="-1"></a>    yt_3 <span class="op">=</span> y<span class="op">*</span>(t<span class="op">**</span><span class="dv">3</span>)</span>
-<span id="cb39-30"><a href="#cb39-30" aria-hidden="true" tabindex="-1"></a>    xyt_2 <span class="op">=</span> x<span class="op">*</span>y<span class="op">*</span>(t<span class="op">**</span><span class="dv">2</span>)</span>
-<span id="cb39-31"><a href="#cb39-31" aria-hidden="true" tabindex="-1"></a>    xy_2t <span class="op">=</span> x<span class="op">*</span>(y<span class="op">**</span><span class="dv">2</span>)<span class="op">*</span>t</span>
-<span id="cb39-32"><a href="#cb39-32" aria-hidden="true" tabindex="-1"></a>    x_2yt <span class="op">=</span> (x<span class="op">**</span><span class="dv">2</span>)<span class="op">*</span>y<span class="op">*</span>t</span>
-<span id="cb39-33"><a href="#cb39-33" aria-hidden="true" tabindex="-1"></a>    xy <span class="op">=</span> x<span class="op">*</span>y</span>
-<span id="cb39-34"><a href="#cb39-34" aria-hidden="true" tabindex="-1"></a>    t_2 <span class="op">=</span> t<span class="op">**</span><span class="dv">2</span></span>
-<span id="cb39-35"><a href="#cb39-35" aria-hidden="true" tabindex="-1"></a>    xt <span class="op">=</span> x<span class="op">*</span>t</span>
-<span id="cb39-36"><a href="#cb39-36" aria-hidden="true" tabindex="-1"></a>    yt <span class="op">=</span> y<span class="op">*</span>t</span>
-<span id="cb39-37"><a href="#cb39-37" aria-hidden="true" tabindex="-1"></a>    xbdry_2 <span class="op">=</span> xbdry<span class="op">**</span><span class="dv">2</span></span>
-<span id="cb39-38"><a href="#cb39-38" aria-hidden="true" tabindex="-1"></a>    ybdry_2 <span class="op">=</span> ybdry<span class="op">**</span><span class="dv">2</span></span>
-<span id="cb39-39"><a href="#cb39-39" aria-hidden="true" tabindex="-1"></a>    xbdry_3 <span class="op">=</span> xbdry<span class="op">**</span><span class="dv">3</span></span>
-<span id="cb39-40"><a href="#cb39-40" aria-hidden="true" tabindex="-1"></a>    ybdry_3 <span class="op">=</span> ybdry<span class="op">**</span><span class="dv">3</span></span>
-<span id="cb39-41"><a href="#cb39-41" aria-hidden="true" tabindex="-1"></a>    xbdry_4 <span class="op">=</span> xbdry<span class="op">**</span><span class="dv">4</span></span>
-<span id="cb39-42"><a href="#cb39-42" aria-hidden="true" tabindex="-1"></a>    ybdry_4 <span class="op">=</span> ybdry<span class="op">**</span><span class="dv">4</span></span>
-<span id="cb39-43"><a href="#cb39-43" aria-hidden="true" tabindex="-1"></a>    xbdryybdry_2 <span class="op">=</span> xbdry<span class="op">*</span>(ybdry<span class="op">**</span><span class="dv">2</span>)</span>
-<span id="cb39-44"><a href="#cb39-44" aria-hidden="true" tabindex="-1"></a>    xbdry_2ybdry <span class="op">=</span> (xbdry<span class="op">**</span><span class="dv">2</span>)<span class="op">*</span>ybdry</span>
-<span id="cb39-45"><a href="#cb39-45" aria-hidden="true" tabindex="-1"></a>    xbdryybdryt <span class="op">=</span> xbdry<span class="op">*</span>ybdry<span class="op">*</span>t</span>
-<span id="cb39-46"><a href="#cb39-46" aria-hidden="true" tabindex="-1"></a>    xbdry_2t <span class="op">=</span> (xbdry<span class="op">**</span><span class="dv">2</span>)<span class="op">*</span>t</span>
-<span id="cb39-47"><a href="#cb39-47" aria-hidden="true" tabindex="-1"></a>    ybdry_2t <span class="op">=</span> (ybdry<span class="op">**</span><span class="dv">2</span>)<span class="op">*</span>t</span>
-<span id="cb39-48"><a href="#cb39-48" aria-hidden="true" tabindex="-1"></a>    xbdry_ybdry <span class="op">=</span> xbdry<span class="op">*</span>ybdry</span>
-<span id="cb39-49"><a href="#cb39-49" aria-hidden="true" tabindex="-1"></a>    tbdry_2 <span class="op">=</span> tbdry<span class="op">**</span><span class="dv">2</span></span>
-<span id="cb39-50"><a href="#cb39-50" aria-hidden="true" tabindex="-1"></a>    xbdry_t<span class="op">=</span> xbdry<span class="op">*</span>t</span>
-<span id="cb39-51"><a href="#cb39-51" aria-hidden="true" tabindex="-1"></a>    ybdry_t <span class="op">=</span> ybdry<span class="op">*</span>t</span>
-<span id="cb39-52"><a href="#cb39-52" aria-hidden="true" tabindex="-1"></a>    x_tbdry <span class="op">=</span> x<span class="op">*</span>tbdry</span>
-<span id="cb39-53"><a href="#cb39-53" aria-hidden="true" tabindex="-1"></a>    y_tbdry <span class="op">=</span> y<span class="op">*</span>tbdry</span>
-<span id="cb39-54"><a href="#cb39-54" aria-hidden="true" tabindex="-1"></a>    xytbdry <span class="op">=</span> x<span class="op">*</span>y<span class="op">*</span>tbdry</span>
-<span id="cb39-55"><a href="#cb39-55" aria-hidden="true" tabindex="-1"></a>    x_2tbdry <span class="op">=</span> (x<span class="op">**</span><span class="dv">2</span>)<span class="op">*</span>tbdry</span>
-<span id="cb39-56"><a href="#cb39-56" aria-hidden="true" tabindex="-1"></a>    y_2tbdry <span class="op">=</span> (y<span class="op">**</span><span class="dv">2</span>)<span class="op">*</span>tbdry</span>
-<span id="cb39-57"><a href="#cb39-57" aria-hidden="true" tabindex="-1"></a>    tbdry_3 <span class="op">=</span> tbdry<span class="op">**</span><span class="dv">3</span></span>
-<span id="cb39-58"><a href="#cb39-58" aria-hidden="true" tabindex="-1"></a>    tbdry_4 <span class="op">=</span> tbdry<span class="op">**</span><span class="dv">4</span></span>
-<span id="cb39-59"><a href="#cb39-59" aria-hidden="true" tabindex="-1"></a>    xbdry_3ybdry <span class="op">=</span> (xbdry<span class="op">**</span><span class="dv">3</span>)<span class="op">*</span>ybdry</span>
-<span id="cb39-60"><a href="#cb39-60" aria-hidden="true" tabindex="-1"></a>    xbdryybdry_3 <span class="op">=</span> xbdry<span class="op">*</span>(ybdry<span class="op">**</span><span class="dv">3</span>)</span>
-<span id="cb39-61"><a href="#cb39-61" aria-hidden="true" tabindex="-1"></a>    xbdry_2ybdry_2 <span class="op">=</span> (xbdry<span class="op">**</span><span class="dv">2</span>)<span class="op">*</span>(ybdry<span class="op">**</span><span class="dv">2</span>)</span>
-<span id="cb39-62"><a href="#cb39-62" aria-hidden="true" tabindex="-1"></a>    xbdry_3t <span class="op">=</span> (xbdry<span class="op">**</span><span class="dv">3</span>)<span class="op">*</span>t</span>
-<span id="cb39-63"><a href="#cb39-63" aria-hidden="true" tabindex="-1"></a>    xbdry_2t_2 <span class="op">=</span> (xbdry<span class="op">**</span><span class="dv">2</span>)<span class="op">*</span>(t<span class="op">**</span><span class="dv">2</span>)</span>
-<span id="cb39-64"><a href="#cb39-64" aria-hidden="true" tabindex="-1"></a>    xbdryt_3 <span class="op">=</span> xbdry<span class="op">*</span>(t<span class="op">**</span><span class="dv">3</span>)</span>
-<span id="cb39-65"><a href="#cb39-65" aria-hidden="true" tabindex="-1"></a>    ybdry_3t <span class="op">=</span> (ybdry<span class="op">**</span><span class="dv">3</span>)<span class="op">*</span>t</span>
-<span id="cb39-66"><a href="#cb39-66" aria-hidden="true" tabindex="-1"></a>    ybdry_2t_2 <span class="op">=</span> (ybdry<span class="op">**</span><span class="dv">2</span>)<span class="op">*</span>(t<span class="op">**</span><span class="dv">2</span>)</span>
-<span id="cb39-67"><a href="#cb39-67" aria-hidden="true" tabindex="-1"></a>    ybdryt_3 <span class="op">=</span> ybdry<span class="op">*</span>(t<span class="op">**</span><span class="dv">3</span>)</span>
-<span id="cb39-68"><a href="#cb39-68" aria-hidden="true" tabindex="-1"></a>    x_3tbdry <span class="op">=</span> (x<span class="op">**</span><span class="dv">3</span>)<span class="op">*</span>tbdry</span>
-<span id="cb39-69"><a href="#cb39-69" aria-hidden="true" tabindex="-1"></a>    x_2tbdry_2 <span class="op">=</span> (x<span class="op">**</span><span class="dv">2</span>)<span class="op">*</span>(tbdry<span class="op">**</span><span class="dv">2</span>)</span>
-<span id="cb39-70"><a href="#cb39-70" aria-hidden="true" tabindex="-1"></a>    xtbdry_3 <span class="op">=</span> x<span class="op">*</span>(tbdry<span class="op">**</span><span class="dv">3</span>)</span>
-<span id="cb39-71"><a href="#cb39-71" aria-hidden="true" tabindex="-1"></a>    y_3tbdry <span class="op">=</span> (y<span class="op">**</span><span class="dv">3</span>)<span class="op">*</span>tbdry</span>
-<span id="cb39-72"><a href="#cb39-72" aria-hidden="true" tabindex="-1"></a>    y_2tbdry_2 <span class="op">=</span> (y<span class="op">**</span><span class="dv">2</span>)<span class="op">*</span>(tbdry<span class="op">**</span><span class="dv">2</span>)</span>
-<span id="cb39-73"><a href="#cb39-73" aria-hidden="true" tabindex="-1"></a>    ytbdry_3 <span class="op">=</span> y<span class="op">*</span>(tbdry<span class="op">**</span><span class="dv">3</span>)</span>
-<span id="cb39-74"><a href="#cb39-74" aria-hidden="true" tabindex="-1"></a>    xbdryybdryt_2 <span class="op">=</span> xbdry<span class="op">*</span>ybdry<span class="op">*</span>(t<span class="op">**</span><span class="dv">2</span>)</span>
-<span id="cb39-75"><a href="#cb39-75" aria-hidden="true" tabindex="-1"></a>    xbdryybdry_2t <span class="op">=</span> xbdry<span class="op">*</span>(ybdry<span class="op">**</span><span class="dv">2</span>)<span class="op">*</span>t</span>
-<span id="cb39-76"><a href="#cb39-76" aria-hidden="true" tabindex="-1"></a>    xbdry_2ybdryt <span class="op">=</span> (xbdry<span class="op">**</span><span class="dv">2</span>)<span class="op">*</span>ybdry<span class="op">*</span>t  </span>
-<span id="cb39-77"><a href="#cb39-77" aria-hidden="true" tabindex="-1"></a>    xytbdry_2 <span class="op">=</span> x<span class="op">*</span>y<span class="op">*</span>(tbdry<span class="op">**</span><span class="dv">2</span>)</span>
-<span id="cb39-78"><a href="#cb39-78" aria-hidden="true" tabindex="-1"></a>    xy_2tbdry <span class="op">=</span> x<span class="op">*</span>(y<span class="op">**</span><span class="dv">2</span>)<span class="op">*</span>tbdry</span>
-<span id="cb39-79"><a href="#cb39-79" aria-hidden="true" tabindex="-1"></a>    x_2ytbdry <span class="op">=</span> (x<span class="op">**</span><span class="dv">2</span>)<span class="op">*</span>y<span class="op">*</span>tbdry</span>
-<span id="cb39-80"><a href="#cb39-80" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb39-81"><a href="#cb39-81" aria-hidden="true" tabindex="-1"></a>    <span class="co">##End of polynomial features</span></span>
-<span id="cb39-82"><a href="#cb39-82" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb39-83"><a href="#cb39-83" aria-hidden="true" tabindex="-1"></a>    temp_input <span class="op">=</span> torch.cat((x,y,t,x_2,y_2,xy,t_2,xt,yt,x_4,y_4,t_4,x_3y,xy_3,x_2y_2,x_3t,x_2t_2,xt_3,y_3t,y_2t_2,yt_3,xyt_2,xy_2t,x_2yt,x_3,y_3,xy_2,x_2y,xyt,x_2t,y_2t,t_3),<span class="dv">1</span>)</span>
-<span id="cb39-84"><a href="#cb39-84" aria-hidden="true" tabindex="-1"></a>    w<span class="op">=</span>network(temp_input)</span>
-<span id="cb39-85"><a href="#cb39-85" aria-hidden="true" tabindex="-1"></a>    temp_input_init <span class="op">=</span> torch.cat((x,y,tbdry,x_2,y_2,xy,tbdry_2,x_tbdry,y_tbdry,x_4,y_4,tbdry_4,x_3y,xy_3,x_2y_2,x_3tbdry,x_2tbdry_2,xtbdry_3,y_3tbdry,y_2tbdry_2,ytbdry_3,xytbdry_2,xy_2tbdry,x_2ytbdry,x_3,y_3,xy_2,x_2y,xytbdry,x_2tbdry,y_2tbdry,tbdry_3),<span class="dv">1</span>)</span>
-<span id="cb39-86"><a href="#cb39-86" aria-hidden="true" tabindex="-1"></a>    w_init <span class="op">=</span> network(temp_input_init)</span>
-<span id="cb39-87"><a href="#cb39-87" aria-hidden="true" tabindex="-1"></a>    wbdry <span class="op">=</span> network(torch.cat((xbdry, ybdry, t,xbdry_2,ybdry_2,xbdry_ybdry,t_2,xbdry_t,ybdry_t,xbdry_4,ybdry_4,t_4,xbdry_3ybdry,xbdryybdry_3,xbdry_2ybdry_2,xbdry_3t,xbdry_2t_2,xbdryt_3,ybdry_3t,ybdry_2t_2,ybdryt_3,xbdryybdryt_2,xbdryybdry_2t,xbdry_2ybdryt,xbdry_3,ybdry_3,xbdryybdry_2,xbdry_2ybdry,xbdryybdryt,xbdry_2t,ybdry_2t,t_3),<span class="dv">1</span>))</span>
-<span id="cb39-88"><a href="#cb39-88" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb39-89"><a href="#cb39-89" aria-hidden="true" tabindex="-1"></a>    dw_dx <span class="op">=</span> torch.autograd.grad(w.<span class="bu">sum</span>(), x, create_graph <span class="op">=</span> <span class="va">True</span>)[<span class="dv">0</span>]</span>
-<span id="cb39-90"><a href="#cb39-90" aria-hidden="true" tabindex="-1"></a>    ddw_ddx <span class="op">=</span> torch.autograd.grad(dw_dx.<span class="bu">sum</span>(), x, create_graph <span class="op">=</span> <span class="va">True</span>)[<span class="dv">0</span>]</span>
-<span id="cb39-91"><a href="#cb39-91" aria-hidden="true" tabindex="-1"></a>    dw_dy <span class="op">=</span> torch.autograd.grad(w.<span class="bu">sum</span>(), y, create_graph <span class="op">=</span> <span class="va">True</span>)[<span class="dv">0</span>] </span>
-<span id="cb39-92"><a href="#cb39-92" aria-hidden="true" tabindex="-1"></a>    ddw_ddy <span class="op">=</span> torch.autograd.grad(dw_dy.<span class="bu">sum</span>(), y, create_graph <span class="op">=</span> <span class="va">True</span>)[<span class="dv">0</span>]</span>
-<span id="cb39-93"><a href="#cb39-93" aria-hidden="true" tabindex="-1"></a>    dw_dt <span class="op">=</span> torch.autograd.grad(w.<span class="bu">sum</span>(), t, create_graph <span class="op">=</span> <span class="va">True</span>)[<span class="dv">0</span>] </span>
-<span id="cb39-94"><a href="#cb39-94" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb39-95"><a href="#cb39-95" aria-hidden="true" tabindex="-1"></a>    A <span class="op">=</span> torch.mean((dw_dt <span class="op">-</span> (ddw_ddx<span class="op">+</span>ddw_ddy))<span class="op">**</span><span class="dv">2</span>)</span>
-<span id="cb39-96"><a href="#cb39-96" aria-hidden="true" tabindex="-1"></a>    B <span class="op">=</span> torch.mean((w_init<span class="op">-</span>g(x,y))<span class="op">**</span><span class="dv">2</span>)</span>
-<span id="cb39-97"><a href="#cb39-97" aria-hidden="true" tabindex="-1"></a>    C <span class="op">=</span> torch.mean((wbdry)<span class="op">**</span><span class="dv">2</span>)</span>
-<span id="cb39-98"><a href="#cb39-98" aria-hidden="true" tabindex="-1"></a>    <span class="co">#print("Loss for each item: {}, {}, {}".format(A,B,C))</span></span>
-<span id="cb39-99"><a href="#cb39-99" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> A<span class="op">+</span>B<span class="op">+</span>C</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> loss2(x, y, t, xbdry, ybdry, tbdry, network):</span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>    x.requires_grad <span class="op">=</span> <span class="va">True</span></span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a>    y.requires_grad <span class="op">=</span> <span class="va">True</span></span>
+<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a>    t.requires_grad <span class="op">=</span> <span class="va">True</span></span>
+<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a>    <span class="co">#Here come all of the polynomial features....</span></span>
+<span id="cb51-7"><a href="#cb51-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-8"><a href="#cb51-8" aria-hidden="true" tabindex="-1"></a>    x_2 <span class="op">=</span> x<span class="op">**</span><span class="dv">2</span></span>
+<span id="cb51-9"><a href="#cb51-9" aria-hidden="true" tabindex="-1"></a>    y_2 <span class="op">=</span> y<span class="op">**</span><span class="dv">2</span></span>
+<span id="cb51-10"><a href="#cb51-10" aria-hidden="true" tabindex="-1"></a>    x_3 <span class="op">=</span> x<span class="op">**</span><span class="dv">3</span></span>
+<span id="cb51-11"><a href="#cb51-11" aria-hidden="true" tabindex="-1"></a>    y_3 <span class="op">=</span> y<span class="op">**</span><span class="dv">3</span></span>
+<span id="cb51-12"><a href="#cb51-12" aria-hidden="true" tabindex="-1"></a>    x_4 <span class="op">=</span> x<span class="op">**</span><span class="dv">4</span></span>
+<span id="cb51-13"><a href="#cb51-13" aria-hidden="true" tabindex="-1"></a>    y_4 <span class="op">=</span> y<span class="op">**</span><span class="dv">4</span></span>
+<span id="cb51-14"><a href="#cb51-14" aria-hidden="true" tabindex="-1"></a>    xy_2 <span class="op">=</span> x<span class="op">*</span>(y<span class="op">**</span><span class="dv">2</span>)</span>
+<span id="cb51-15"><a href="#cb51-15" aria-hidden="true" tabindex="-1"></a>    x_2y <span class="op">=</span> (x<span class="op">**</span><span class="dv">2</span>)<span class="op">*</span>y</span>
+<span id="cb51-16"><a href="#cb51-16" aria-hidden="true" tabindex="-1"></a>    xyt <span class="op">=</span> x<span class="op">*</span>y<span class="op">*</span>t</span>
+<span id="cb51-17"><a href="#cb51-17" aria-hidden="true" tabindex="-1"></a>    x_2t <span class="op">=</span> (x<span class="op">**</span><span class="dv">2</span>)<span class="op">*</span>t</span>
+<span id="cb51-18"><a href="#cb51-18" aria-hidden="true" tabindex="-1"></a>    y_2t <span class="op">=</span> (y<span class="op">**</span><span class="dv">2</span>)<span class="op">*</span>t</span>
+<span id="cb51-19"><a href="#cb51-19" aria-hidden="true" tabindex="-1"></a>    t_3 <span class="op">=</span> t<span class="op">**</span><span class="dv">3</span></span>
+<span id="cb51-20"><a href="#cb51-20" aria-hidden="true" tabindex="-1"></a>    t_4 <span class="op">=</span> t<span class="op">**</span><span class="dv">4</span></span>
+<span id="cb51-21"><a href="#cb51-21" aria-hidden="true" tabindex="-1"></a>    x_3y <span class="op">=</span> (x<span class="op">**</span><span class="dv">3</span>)<span class="op">*</span>y</span>
+<span id="cb51-22"><a href="#cb51-22" aria-hidden="true" tabindex="-1"></a>    xy_3 <span class="op">=</span> x<span class="op">*</span>(y<span class="op">**</span><span class="dv">3</span>)</span>
+<span id="cb51-23"><a href="#cb51-23" aria-hidden="true" tabindex="-1"></a>    x_2y_2 <span class="op">=</span> (x<span class="op">**</span><span class="dv">2</span>)<span class="op">*</span>(y<span class="op">**</span><span class="dv">2</span>)</span>
+<span id="cb51-24"><a href="#cb51-24" aria-hidden="true" tabindex="-1"></a>    x_3t <span class="op">=</span> (x<span class="op">**</span><span class="dv">3</span>)<span class="op">*</span>t</span>
+<span id="cb51-25"><a href="#cb51-25" aria-hidden="true" tabindex="-1"></a>    x_2t_2 <span class="op">=</span> (x<span class="op">**</span><span class="dv">2</span>)<span class="op">*</span>(t<span class="op">**</span><span class="dv">2</span>)</span>
+<span id="cb51-26"><a href="#cb51-26" aria-hidden="true" tabindex="-1"></a>    xt_3 <span class="op">=</span> x<span class="op">*</span>(t<span class="op">**</span><span class="dv">3</span>)</span>
+<span id="cb51-27"><a href="#cb51-27" aria-hidden="true" tabindex="-1"></a>    y_3t <span class="op">=</span> (y<span class="op">**</span><span class="dv">3</span>)<span class="op">*</span>t</span>
+<span id="cb51-28"><a href="#cb51-28" aria-hidden="true" tabindex="-1"></a>    y_2t_2 <span class="op">=</span> (y<span class="op">**</span><span class="dv">2</span>)<span class="op">*</span>(t<span class="op">**</span><span class="dv">2</span>)</span>
+<span id="cb51-29"><a href="#cb51-29" aria-hidden="true" tabindex="-1"></a>    yt_3 <span class="op">=</span> y<span class="op">*</span>(t<span class="op">**</span><span class="dv">3</span>)</span>
+<span id="cb51-30"><a href="#cb51-30" aria-hidden="true" tabindex="-1"></a>    xyt_2 <span class="op">=</span> x<span class="op">*</span>y<span class="op">*</span>(t<span class="op">**</span><span class="dv">2</span>)</span>
+<span id="cb51-31"><a href="#cb51-31" aria-hidden="true" tabindex="-1"></a>    xy_2t <span class="op">=</span> x<span class="op">*</span>(y<span class="op">**</span><span class="dv">2</span>)<span class="op">*</span>t</span>
+<span id="cb51-32"><a href="#cb51-32" aria-hidden="true" tabindex="-1"></a>    x_2yt <span class="op">=</span> (x<span class="op">**</span><span class="dv">2</span>)<span class="op">*</span>y<span class="op">*</span>t</span>
+<span id="cb51-33"><a href="#cb51-33" aria-hidden="true" tabindex="-1"></a>    xy <span class="op">=</span> x<span class="op">*</span>y</span>
+<span id="cb51-34"><a href="#cb51-34" aria-hidden="true" tabindex="-1"></a>    t_2 <span class="op">=</span> t<span class="op">**</span><span class="dv">2</span></span>
+<span id="cb51-35"><a href="#cb51-35" aria-hidden="true" tabindex="-1"></a>    xt <span class="op">=</span> x<span class="op">*</span>t</span>
+<span id="cb51-36"><a href="#cb51-36" aria-hidden="true" tabindex="-1"></a>    yt <span class="op">=</span> y<span class="op">*</span>t</span>
+<span id="cb51-37"><a href="#cb51-37" aria-hidden="true" tabindex="-1"></a>    xbdry_2 <span class="op">=</span> xbdry<span class="op">**</span><span class="dv">2</span></span>
+<span id="cb51-38"><a href="#cb51-38" aria-hidden="true" tabindex="-1"></a>    ybdry_2 <span class="op">=</span> ybdry<span class="op">**</span><span class="dv">2</span></span>
+<span id="cb51-39"><a href="#cb51-39" aria-hidden="true" tabindex="-1"></a>    xbdry_3 <span class="op">=</span> xbdry<span class="op">**</span><span class="dv">3</span></span>
+<span id="cb51-40"><a href="#cb51-40" aria-hidden="true" tabindex="-1"></a>    ybdry_3 <span class="op">=</span> ybdry<span class="op">**</span><span class="dv">3</span></span>
+<span id="cb51-41"><a href="#cb51-41" aria-hidden="true" tabindex="-1"></a>    xbdry_4 <span class="op">=</span> xbdry<span class="op">**</span><span class="dv">4</span></span>
+<span id="cb51-42"><a href="#cb51-42" aria-hidden="true" tabindex="-1"></a>    ybdry_4 <span class="op">=</span> ybdry<span class="op">**</span><span class="dv">4</span></span>
+<span id="cb51-43"><a href="#cb51-43" aria-hidden="true" tabindex="-1"></a>    xbdryybdry_2 <span class="op">=</span> xbdry<span class="op">*</span>(ybdry<span class="op">**</span><span class="dv">2</span>)</span>
+<span id="cb51-44"><a href="#cb51-44" aria-hidden="true" tabindex="-1"></a>    xbdry_2ybdry <span class="op">=</span> (xbdry<span class="op">**</span><span class="dv">2</span>)<span class="op">*</span>ybdry</span>
+<span id="cb51-45"><a href="#cb51-45" aria-hidden="true" tabindex="-1"></a>    xbdryybdryt <span class="op">=</span> xbdry<span class="op">*</span>ybdry<span class="op">*</span>t</span>
+<span id="cb51-46"><a href="#cb51-46" aria-hidden="true" tabindex="-1"></a>    xbdry_2t <span class="op">=</span> (xbdry<span class="op">**</span><span class="dv">2</span>)<span class="op">*</span>t</span>
+<span id="cb51-47"><a href="#cb51-47" aria-hidden="true" tabindex="-1"></a>    ybdry_2t <span class="op">=</span> (ybdry<span class="op">**</span><span class="dv">2</span>)<span class="op">*</span>t</span>
+<span id="cb51-48"><a href="#cb51-48" aria-hidden="true" tabindex="-1"></a>    xbdry_ybdry <span class="op">=</span> xbdry<span class="op">*</span>ybdry</span>
+<span id="cb51-49"><a href="#cb51-49" aria-hidden="true" tabindex="-1"></a>    tbdry_2 <span class="op">=</span> tbdry<span class="op">**</span><span class="dv">2</span></span>
+<span id="cb51-50"><a href="#cb51-50" aria-hidden="true" tabindex="-1"></a>    xbdry_t<span class="op">=</span> xbdry<span class="op">*</span>t</span>
+<span id="cb51-51"><a href="#cb51-51" aria-hidden="true" tabindex="-1"></a>    ybdry_t <span class="op">=</span> ybdry<span class="op">*</span>t</span>
+<span id="cb51-52"><a href="#cb51-52" aria-hidden="true" tabindex="-1"></a>    x_tbdry <span class="op">=</span> x<span class="op">*</span>tbdry</span>
+<span id="cb51-53"><a href="#cb51-53" aria-hidden="true" tabindex="-1"></a>    y_tbdry <span class="op">=</span> y<span class="op">*</span>tbdry</span>
+<span id="cb51-54"><a href="#cb51-54" aria-hidden="true" tabindex="-1"></a>    xytbdry <span class="op">=</span> x<span class="op">*</span>y<span class="op">*</span>tbdry</span>
+<span id="cb51-55"><a href="#cb51-55" aria-hidden="true" tabindex="-1"></a>    x_2tbdry <span class="op">=</span> (x<span class="op">**</span><span class="dv">2</span>)<span class="op">*</span>tbdry</span>
+<span id="cb51-56"><a href="#cb51-56" aria-hidden="true" tabindex="-1"></a>    y_2tbdry <span class="op">=</span> (y<span class="op">**</span><span class="dv">2</span>)<span class="op">*</span>tbdry</span>
+<span id="cb51-57"><a href="#cb51-57" aria-hidden="true" tabindex="-1"></a>    tbdry_3 <span class="op">=</span> tbdry<span class="op">**</span><span class="dv">3</span></span>
+<span id="cb51-58"><a href="#cb51-58" aria-hidden="true" tabindex="-1"></a>    tbdry_4 <span class="op">=</span> tbdry<span class="op">**</span><span class="dv">4</span></span>
+<span id="cb51-59"><a href="#cb51-59" aria-hidden="true" tabindex="-1"></a>    xbdry_3ybdry <span class="op">=</span> (xbdry<span class="op">**</span><span class="dv">3</span>)<span class="op">*</span>ybdry</span>
+<span id="cb51-60"><a href="#cb51-60" aria-hidden="true" tabindex="-1"></a>    xbdryybdry_3 <span class="op">=</span> xbdry<span class="op">*</span>(ybdry<span class="op">**</span><span class="dv">3</span>)</span>
+<span id="cb51-61"><a href="#cb51-61" aria-hidden="true" tabindex="-1"></a>    xbdry_2ybdry_2 <span class="op">=</span> (xbdry<span class="op">**</span><span class="dv">2</span>)<span class="op">*</span>(ybdry<span class="op">**</span><span class="dv">2</span>)</span>
+<span id="cb51-62"><a href="#cb51-62" aria-hidden="true" tabindex="-1"></a>    xbdry_3t <span class="op">=</span> (xbdry<span class="op">**</span><span class="dv">3</span>)<span class="op">*</span>t</span>
+<span id="cb51-63"><a href="#cb51-63" aria-hidden="true" tabindex="-1"></a>    xbdry_2t_2 <span class="op">=</span> (xbdry<span class="op">**</span><span class="dv">2</span>)<span class="op">*</span>(t<span class="op">**</span><span class="dv">2</span>)</span>
+<span id="cb51-64"><a href="#cb51-64" aria-hidden="true" tabindex="-1"></a>    xbdryt_3 <span class="op">=</span> xbdry<span class="op">*</span>(t<span class="op">**</span><span class="dv">3</span>)</span>
+<span id="cb51-65"><a href="#cb51-65" aria-hidden="true" tabindex="-1"></a>    ybdry_3t <span class="op">=</span> (ybdry<span class="op">**</span><span class="dv">3</span>)<span class="op">*</span>t</span>
+<span id="cb51-66"><a href="#cb51-66" aria-hidden="true" tabindex="-1"></a>    ybdry_2t_2 <span class="op">=</span> (ybdry<span class="op">**</span><span class="dv">2</span>)<span class="op">*</span>(t<span class="op">**</span><span class="dv">2</span>)</span>
+<span id="cb51-67"><a href="#cb51-67" aria-hidden="true" tabindex="-1"></a>    ybdryt_3 <span class="op">=</span> ybdry<span class="op">*</span>(t<span class="op">**</span><span class="dv">3</span>)</span>
+<span id="cb51-68"><a href="#cb51-68" aria-hidden="true" tabindex="-1"></a>    x_3tbdry <span class="op">=</span> (x<span class="op">**</span><span class="dv">3</span>)<span class="op">*</span>tbdry</span>
+<span id="cb51-69"><a href="#cb51-69" aria-hidden="true" tabindex="-1"></a>    x_2tbdry_2 <span class="op">=</span> (x<span class="op">**</span><span class="dv">2</span>)<span class="op">*</span>(tbdry<span class="op">**</span><span class="dv">2</span>)</span>
+<span id="cb51-70"><a href="#cb51-70" aria-hidden="true" tabindex="-1"></a>    xtbdry_3 <span class="op">=</span> x<span class="op">*</span>(tbdry<span class="op">**</span><span class="dv">3</span>)</span>
+<span id="cb51-71"><a href="#cb51-71" aria-hidden="true" tabindex="-1"></a>    y_3tbdry <span class="op">=</span> (y<span class="op">**</span><span class="dv">3</span>)<span class="op">*</span>tbdry</span>
+<span id="cb51-72"><a href="#cb51-72" aria-hidden="true" tabindex="-1"></a>    y_2tbdry_2 <span class="op">=</span> (y<span class="op">**</span><span class="dv">2</span>)<span class="op">*</span>(tbdry<span class="op">**</span><span class="dv">2</span>)</span>
+<span id="cb51-73"><a href="#cb51-73" aria-hidden="true" tabindex="-1"></a>    ytbdry_3 <span class="op">=</span> y<span class="op">*</span>(tbdry<span class="op">**</span><span class="dv">3</span>)</span>
+<span id="cb51-74"><a href="#cb51-74" aria-hidden="true" tabindex="-1"></a>    xbdryybdryt_2 <span class="op">=</span> xbdry<span class="op">*</span>ybdry<span class="op">*</span>(t<span class="op">**</span><span class="dv">2</span>)</span>
+<span id="cb51-75"><a href="#cb51-75" aria-hidden="true" tabindex="-1"></a>    xbdryybdry_2t <span class="op">=</span> xbdry<span class="op">*</span>(ybdry<span class="op">**</span><span class="dv">2</span>)<span class="op">*</span>t</span>
+<span id="cb51-76"><a href="#cb51-76" aria-hidden="true" tabindex="-1"></a>    xbdry_2ybdryt <span class="op">=</span> (xbdry<span class="op">**</span><span class="dv">2</span>)<span class="op">*</span>ybdry<span class="op">*</span>t  </span>
+<span id="cb51-77"><a href="#cb51-77" aria-hidden="true" tabindex="-1"></a>    xytbdry_2 <span class="op">=</span> x<span class="op">*</span>y<span class="op">*</span>(tbdry<span class="op">**</span><span class="dv">2</span>)</span>
+<span id="cb51-78"><a href="#cb51-78" aria-hidden="true" tabindex="-1"></a>    xy_2tbdry <span class="op">=</span> x<span class="op">*</span>(y<span class="op">**</span><span class="dv">2</span>)<span class="op">*</span>tbdry</span>
+<span id="cb51-79"><a href="#cb51-79" aria-hidden="true" tabindex="-1"></a>    x_2ytbdry <span class="op">=</span> (x<span class="op">**</span><span class="dv">2</span>)<span class="op">*</span>y<span class="op">*</span>tbdry</span>
+<span id="cb51-80"><a href="#cb51-80" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-81"><a href="#cb51-81" aria-hidden="true" tabindex="-1"></a>    <span class="co">##End of polynomial features</span></span>
+<span id="cb51-82"><a href="#cb51-82" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-83"><a href="#cb51-83" aria-hidden="true" tabindex="-1"></a>    temp_input <span class="op">=</span> torch.cat((x,y,t,x_2,y_2,xy,t_2,xt,yt,x_4,y_4,t_4,x_3y,xy_3,x_2y_2,x_3t,x_2t_2,xt_3,y_3t,y_2t_2,yt_3,xyt_2,xy_2t,x_2yt,x_3,y_3,xy_2,x_2y,xyt,x_2t,y_2t,t_3),<span class="dv">1</span>)</span>
+<span id="cb51-84"><a href="#cb51-84" aria-hidden="true" tabindex="-1"></a>    w<span class="op">=</span>network(temp_input)</span>
+<span id="cb51-85"><a href="#cb51-85" aria-hidden="true" tabindex="-1"></a>    temp_input_init <span class="op">=</span> torch.cat((x,y,tbdry,x_2,y_2,xy,tbdry_2,x_tbdry,y_tbdry,x_4,y_4,tbdry_4,x_3y,xy_3,x_2y_2,x_3tbdry,x_2tbdry_2,xtbdry_3,y_3tbdry,y_2tbdry_2,ytbdry_3,xytbdry_2,xy_2tbdry,x_2ytbdry,x_3,y_3,xy_2,x_2y,xytbdry,x_2tbdry,y_2tbdry,tbdry_3),<span class="dv">1</span>)</span>
+<span id="cb51-86"><a href="#cb51-86" aria-hidden="true" tabindex="-1"></a>    w_init <span class="op">=</span> network(temp_input_init)</span>
+<span id="cb51-87"><a href="#cb51-87" aria-hidden="true" tabindex="-1"></a>    wbdry <span class="op">=</span> network(torch.cat((xbdry, ybdry, t,xbdry_2,ybdry_2,xbdry_ybdry,t_2,xbdry_t,ybdry_t,xbdry_4,ybdry_4,t_4,xbdry_3ybdry,xbdryybdry_3,xbdry_2ybdry_2,xbdry_3t,xbdry_2t_2,xbdryt_3,ybdry_3t,ybdry_2t_2,ybdryt_3,xbdryybdryt_2,xbdryybdry_2t,xbdry_2ybdryt,xbdry_3,ybdry_3,xbdryybdry_2,xbdry_2ybdry,xbdryybdryt,xbdry_2t,ybdry_2t,t_3),<span class="dv">1</span>))</span>
+<span id="cb51-88"><a href="#cb51-88" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-89"><a href="#cb51-89" aria-hidden="true" tabindex="-1"></a>    dw_dx <span class="op">=</span> torch.autograd.grad(w.<span class="bu">sum</span>(), x, create_graph <span class="op">=</span> <span class="va">True</span>)[<span class="dv">0</span>]</span>
+<span id="cb51-90"><a href="#cb51-90" aria-hidden="true" tabindex="-1"></a>    ddw_ddx <span class="op">=</span> torch.autograd.grad(dw_dx.<span class="bu">sum</span>(), x, create_graph <span class="op">=</span> <span class="va">True</span>)[<span class="dv">0</span>]</span>
+<span id="cb51-91"><a href="#cb51-91" aria-hidden="true" tabindex="-1"></a>    dw_dy <span class="op">=</span> torch.autograd.grad(w.<span class="bu">sum</span>(), y, create_graph <span class="op">=</span> <span class="va">True</span>)[<span class="dv">0</span>] </span>
+<span id="cb51-92"><a href="#cb51-92" aria-hidden="true" tabindex="-1"></a>    ddw_ddy <span class="op">=</span> torch.autograd.grad(dw_dy.<span class="bu">sum</span>(), y, create_graph <span class="op">=</span> <span class="va">True</span>)[<span class="dv">0</span>]</span>
+<span id="cb51-93"><a href="#cb51-93" aria-hidden="true" tabindex="-1"></a>    dw_dt <span class="op">=</span> torch.autograd.grad(w.<span class="bu">sum</span>(), t, create_graph <span class="op">=</span> <span class="va">True</span>)[<span class="dv">0</span>] </span>
+<span id="cb51-94"><a href="#cb51-94" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-95"><a href="#cb51-95" aria-hidden="true" tabindex="-1"></a>    A <span class="op">=</span> torch.mean((dw_dt <span class="op">-</span> (ddw_ddx<span class="op">+</span>ddw_ddy))<span class="op">**</span><span class="dv">2</span>)</span>
+<span id="cb51-96"><a href="#cb51-96" aria-hidden="true" tabindex="-1"></a>    B <span class="op">=</span> torch.mean((w_init<span class="op">-</span>g(x,y))<span class="op">**</span><span class="dv">2</span>)</span>
+<span id="cb51-97"><a href="#cb51-97" aria-hidden="true" tabindex="-1"></a>    C <span class="op">=</span> torch.mean((wbdry)<span class="op">**</span><span class="dv">2</span>)</span>
+<span id="cb51-98"><a href="#cb51-98" aria-hidden="true" tabindex="-1"></a>    <span class="co">#print("Loss for each item: {}, {}, {}".format(A,B,C))</span></span>
+<span id="cb51-99"><a href="#cb51-99" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> A<span class="op">+</span>B<span class="op">+</span>C</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Below, I define a helper function for computing values the network generates from input data. It computes all of the needed polynomial features before supplying them into the network.</p>
 <div class="cell" data-execution_count="8">
-<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> network_value(x, y, t, network):</span>
-<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>    x_2 <span class="op">=</span> x<span class="op">**</span><span class="dv">2</span></span>
-<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>    y_2 <span class="op">=</span> y<span class="op">**</span><span class="dv">2</span></span>
-<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>    x_3 <span class="op">=</span> x<span class="op">**</span><span class="dv">3</span></span>
-<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>    y_3 <span class="op">=</span> y<span class="op">**</span><span class="dv">3</span></span>
-<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a>    x_4 <span class="op">=</span> x<span class="op">**</span><span class="dv">4</span></span>
-<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a>    y_4 <span class="op">=</span> y<span class="op">**</span><span class="dv">4</span></span>
-<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a>    xy_2 <span class="op">=</span> x<span class="op">*</span>(y<span class="op">**</span><span class="dv">2</span>)</span>
-<span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a>    x_2y <span class="op">=</span> (x<span class="op">**</span><span class="dv">2</span>)<span class="op">*</span>y</span>
-<span id="cb40-10"><a href="#cb40-10" aria-hidden="true" tabindex="-1"></a>    xyt <span class="op">=</span> x<span class="op">*</span>y<span class="op">*</span>t</span>
-<span id="cb40-11"><a href="#cb40-11" aria-hidden="true" tabindex="-1"></a>    x_2t <span class="op">=</span> (x<span class="op">**</span><span class="dv">2</span>)<span class="op">*</span>t</span>
-<span id="cb40-12"><a href="#cb40-12" aria-hidden="true" tabindex="-1"></a>    y_2t <span class="op">=</span> (y<span class="op">**</span><span class="dv">2</span>)<span class="op">*</span>t</span>
-<span id="cb40-13"><a href="#cb40-13" aria-hidden="true" tabindex="-1"></a>    t_3 <span class="op">=</span> t<span class="op">**</span><span class="dv">3</span></span>
-<span id="cb40-14"><a href="#cb40-14" aria-hidden="true" tabindex="-1"></a>    t_4 <span class="op">=</span> t<span class="op">**</span><span class="dv">4</span></span>
-<span id="cb40-15"><a href="#cb40-15" aria-hidden="true" tabindex="-1"></a>    xy <span class="op">=</span> x<span class="op">*</span>y</span>
-<span id="cb40-16"><a href="#cb40-16" aria-hidden="true" tabindex="-1"></a>    t_2 <span class="op">=</span> t<span class="op">**</span><span class="dv">2</span></span>
-<span id="cb40-17"><a href="#cb40-17" aria-hidden="true" tabindex="-1"></a>    xt <span class="op">=</span> x<span class="op">*</span>t</span>
-<span id="cb40-18"><a href="#cb40-18" aria-hidden="true" tabindex="-1"></a>    yt <span class="op">=</span> y<span class="op">*</span>t</span>
-<span id="cb40-19"><a href="#cb40-19" aria-hidden="true" tabindex="-1"></a>    x_3y <span class="op">=</span> (x<span class="op">**</span><span class="dv">3</span>)<span class="op">*</span>y</span>
-<span id="cb40-20"><a href="#cb40-20" aria-hidden="true" tabindex="-1"></a>    xy_3 <span class="op">=</span> x<span class="op">*</span>(y<span class="op">**</span><span class="dv">3</span>)</span>
-<span id="cb40-21"><a href="#cb40-21" aria-hidden="true" tabindex="-1"></a>    x_2y_2 <span class="op">=</span> (x<span class="op">**</span><span class="dv">2</span>)<span class="op">*</span>(y<span class="op">**</span><span class="dv">2</span>)</span>
-<span id="cb40-22"><a href="#cb40-22" aria-hidden="true" tabindex="-1"></a>    x_3t <span class="op">=</span> (x<span class="op">**</span><span class="dv">3</span>)<span class="op">*</span>t</span>
-<span id="cb40-23"><a href="#cb40-23" aria-hidden="true" tabindex="-1"></a>    x_2t_2 <span class="op">=</span> (x<span class="op">**</span><span class="dv">2</span>)<span class="op">*</span>(t<span class="op">**</span><span class="dv">2</span>)</span>
-<span id="cb40-24"><a href="#cb40-24" aria-hidden="true" tabindex="-1"></a>    xt_3 <span class="op">=</span> x<span class="op">*</span>(t<span class="op">**</span><span class="dv">3</span>)</span>
-<span id="cb40-25"><a href="#cb40-25" aria-hidden="true" tabindex="-1"></a>    y_3t <span class="op">=</span> (y<span class="op">**</span><span class="dv">3</span>)<span class="op">*</span>t</span>
-<span id="cb40-26"><a href="#cb40-26" aria-hidden="true" tabindex="-1"></a>    y_2t_2 <span class="op">=</span> (y<span class="op">**</span><span class="dv">2</span>)<span class="op">*</span>(t<span class="op">**</span><span class="dv">2</span>)</span>
-<span id="cb40-27"><a href="#cb40-27" aria-hidden="true" tabindex="-1"></a>    yt_3 <span class="op">=</span> y<span class="op">*</span>(t<span class="op">**</span><span class="dv">3</span>)</span>
-<span id="cb40-28"><a href="#cb40-28" aria-hidden="true" tabindex="-1"></a>    xyt_2 <span class="op">=</span> x<span class="op">*</span>y<span class="op">*</span>(t<span class="op">**</span><span class="dv">2</span>)</span>
-<span id="cb40-29"><a href="#cb40-29" aria-hidden="true" tabindex="-1"></a>    xy_2t <span class="op">=</span> x<span class="op">*</span>(y<span class="op">**</span><span class="dv">2</span>)<span class="op">*</span>t</span>
-<span id="cb40-30"><a href="#cb40-30" aria-hidden="true" tabindex="-1"></a>    x_2yt <span class="op">=</span> (x<span class="op">**</span><span class="dv">2</span>)<span class="op">*</span>y<span class="op">*</span>t</span>
-<span id="cb40-31"><a href="#cb40-31" aria-hidden="true" tabindex="-1"></a>    temp_input <span class="op">=</span> torch.cat((x,y,t,x_2,y_2,xy,t_2,xt,yt,x_4,y_4,t_4,x_3y,xy_3,x_2y_2,x_3t,x_2t_2,xt_3,y_3t,y_2t_2,yt_3,xyt_2,xy_2t,x_2yt,x_3,y_3,xy_2,x_2y,xyt,x_2t,y_2t,t_3),<span class="dv">1</span>)</span>
-<span id="cb40-32"><a href="#cb40-32" aria-hidden="true" tabindex="-1"></a>    w<span class="op">=</span>network(temp_input)</span>
-<span id="cb40-33"><a href="#cb40-33" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> w</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> network_value(x, y, t, network):</span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>    x_2 <span class="op">=</span> x<span class="op">**</span><span class="dv">2</span></span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a>    y_2 <span class="op">=</span> y<span class="op">**</span><span class="dv">2</span></span>
+<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a>    x_3 <span class="op">=</span> x<span class="op">**</span><span class="dv">3</span></span>
+<span id="cb52-5"><a href="#cb52-5" aria-hidden="true" tabindex="-1"></a>    y_3 <span class="op">=</span> y<span class="op">**</span><span class="dv">3</span></span>
+<span id="cb52-6"><a href="#cb52-6" aria-hidden="true" tabindex="-1"></a>    x_4 <span class="op">=</span> x<span class="op">**</span><span class="dv">4</span></span>
+<span id="cb52-7"><a href="#cb52-7" aria-hidden="true" tabindex="-1"></a>    y_4 <span class="op">=</span> y<span class="op">**</span><span class="dv">4</span></span>
+<span id="cb52-8"><a href="#cb52-8" aria-hidden="true" tabindex="-1"></a>    xy_2 <span class="op">=</span> x<span class="op">*</span>(y<span class="op">**</span><span class="dv">2</span>)</span>
+<span id="cb52-9"><a href="#cb52-9" aria-hidden="true" tabindex="-1"></a>    x_2y <span class="op">=</span> (x<span class="op">**</span><span class="dv">2</span>)<span class="op">*</span>y</span>
+<span id="cb52-10"><a href="#cb52-10" aria-hidden="true" tabindex="-1"></a>    xyt <span class="op">=</span> x<span class="op">*</span>y<span class="op">*</span>t</span>
+<span id="cb52-11"><a href="#cb52-11" aria-hidden="true" tabindex="-1"></a>    x_2t <span class="op">=</span> (x<span class="op">**</span><span class="dv">2</span>)<span class="op">*</span>t</span>
+<span id="cb52-12"><a href="#cb52-12" aria-hidden="true" tabindex="-1"></a>    y_2t <span class="op">=</span> (y<span class="op">**</span><span class="dv">2</span>)<span class="op">*</span>t</span>
+<span id="cb52-13"><a href="#cb52-13" aria-hidden="true" tabindex="-1"></a>    t_3 <span class="op">=</span> t<span class="op">**</span><span class="dv">3</span></span>
+<span id="cb52-14"><a href="#cb52-14" aria-hidden="true" tabindex="-1"></a>    t_4 <span class="op">=</span> t<span class="op">**</span><span class="dv">4</span></span>
+<span id="cb52-15"><a href="#cb52-15" aria-hidden="true" tabindex="-1"></a>    xy <span class="op">=</span> x<span class="op">*</span>y</span>
+<span id="cb52-16"><a href="#cb52-16" aria-hidden="true" tabindex="-1"></a>    t_2 <span class="op">=</span> t<span class="op">**</span><span class="dv">2</span></span>
+<span id="cb52-17"><a href="#cb52-17" aria-hidden="true" tabindex="-1"></a>    xt <span class="op">=</span> x<span class="op">*</span>t</span>
+<span id="cb52-18"><a href="#cb52-18" aria-hidden="true" tabindex="-1"></a>    yt <span class="op">=</span> y<span class="op">*</span>t</span>
+<span id="cb52-19"><a href="#cb52-19" aria-hidden="true" tabindex="-1"></a>    x_3y <span class="op">=</span> (x<span class="op">**</span><span class="dv">3</span>)<span class="op">*</span>y</span>
+<span id="cb52-20"><a href="#cb52-20" aria-hidden="true" tabindex="-1"></a>    xy_3 <span class="op">=</span> x<span class="op">*</span>(y<span class="op">**</span><span class="dv">3</span>)</span>
+<span id="cb52-21"><a href="#cb52-21" aria-hidden="true" tabindex="-1"></a>    x_2y_2 <span class="op">=</span> (x<span class="op">**</span><span class="dv">2</span>)<span class="op">*</span>(y<span class="op">**</span><span class="dv">2</span>)</span>
+<span id="cb52-22"><a href="#cb52-22" aria-hidden="true" tabindex="-1"></a>    x_3t <span class="op">=</span> (x<span class="op">**</span><span class="dv">3</span>)<span class="op">*</span>t</span>
+<span id="cb52-23"><a href="#cb52-23" aria-hidden="true" tabindex="-1"></a>    x_2t_2 <span class="op">=</span> (x<span class="op">**</span><span class="dv">2</span>)<span class="op">*</span>(t<span class="op">**</span><span class="dv">2</span>)</span>
+<span id="cb52-24"><a href="#cb52-24" aria-hidden="true" tabindex="-1"></a>    xt_3 <span class="op">=</span> x<span class="op">*</span>(t<span class="op">**</span><span class="dv">3</span>)</span>
+<span id="cb52-25"><a href="#cb52-25" aria-hidden="true" tabindex="-1"></a>    y_3t <span class="op">=</span> (y<span class="op">**</span><span class="dv">3</span>)<span class="op">*</span>t</span>
+<span id="cb52-26"><a href="#cb52-26" aria-hidden="true" tabindex="-1"></a>    y_2t_2 <span class="op">=</span> (y<span class="op">**</span><span class="dv">2</span>)<span class="op">*</span>(t<span class="op">**</span><span class="dv">2</span>)</span>
+<span id="cb52-27"><a href="#cb52-27" aria-hidden="true" tabindex="-1"></a>    yt_3 <span class="op">=</span> y<span class="op">*</span>(t<span class="op">**</span><span class="dv">3</span>)</span>
+<span id="cb52-28"><a href="#cb52-28" aria-hidden="true" tabindex="-1"></a>    xyt_2 <span class="op">=</span> x<span class="op">*</span>y<span class="op">*</span>(t<span class="op">**</span><span class="dv">2</span>)</span>
+<span id="cb52-29"><a href="#cb52-29" aria-hidden="true" tabindex="-1"></a>    xy_2t <span class="op">=</span> x<span class="op">*</span>(y<span class="op">**</span><span class="dv">2</span>)<span class="op">*</span>t</span>
+<span id="cb52-30"><a href="#cb52-30" aria-hidden="true" tabindex="-1"></a>    x_2yt <span class="op">=</span> (x<span class="op">**</span><span class="dv">2</span>)<span class="op">*</span>y<span class="op">*</span>t</span>
+<span id="cb52-31"><a href="#cb52-31" aria-hidden="true" tabindex="-1"></a>    temp_input <span class="op">=</span> torch.cat((x,y,t,x_2,y_2,xy,t_2,xt,yt,x_4,y_4,t_4,x_3y,xy_3,x_2y_2,x_3t,x_2t_2,xt_3,y_3t,y_2t_2,yt_3,xyt_2,xy_2t,x_2yt,x_3,y_3,xy_2,x_2y,xyt,x_2t,y_2t,t_3),<span class="dv">1</span>)</span>
+<span id="cb52-32"><a href="#cb52-32" aria-hidden="true" tabindex="-1"></a>    w<span class="op">=</span>network(temp_input)</span>
+<span id="cb52-33"><a href="#cb52-33" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> w</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Now, I build and train the network.</p>
 <div class="cell" data-execution_count="9">
-<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>model2 <span class="op">=</span> NeuralNetwork2()</span>
-<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>optimizer2 <span class="op">=</span> torch.optim.SGD(model2.parameters(), lr<span class="op">=</span><span class="fl">0.01</span>, momentum<span class="op">=</span><span class="fl">.9</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>model2 <span class="op">=</span> NeuralNetwork2()</span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>optimizer2 <span class="op">=</span> torch.optim.SGD(model2.parameters(), lr<span class="op">=</span><span class="fl">0.01</span>, momentum<span class="op">=</span><span class="fl">.9</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell" data-execution_count="10">
-<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>epochs <span class="op">=</span> <span class="dv">100000</span></span>
-<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>loss_values <span class="op">=</span> np.zeros(<span class="dv">100000</span>)</span>
-<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(epochs):</span>
-<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>    l <span class="op">=</span> loss2(x, y, t, xbdry, ybdry, tbdry, model2)</span>
-<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>    l.backward()</span>
-<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a>    optimizer2.step()</span>
-<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a>    optimizer2.zero_grad()</span>
-<span id="cb42-8"><a href="#cb42-8" aria-hidden="true" tabindex="-1"></a>    loss_values[i]<span class="op">=</span>l</span>
-<span id="cb42-9"><a href="#cb42-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> i<span class="op">%</span><span class="dv">1000</span><span class="op">==</span><span class="dv">0</span>:</span>
-<span id="cb42-10"><a href="#cb42-10" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">"Loss at epoch </span><span class="sc">{}</span><span class="st">: </span><span class="sc">{}</span><span class="st">"</span>.<span class="bu">format</span>(i, l.item()))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>epochs <span class="op">=</span> <span class="dv">100000</span></span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>loss_values <span class="op">=</span> np.zeros(<span class="dv">100000</span>)</span>
+<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(epochs):</span>
+<span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a>    l <span class="op">=</span> loss2(x, y, t, xbdry, ybdry, tbdry, model2)</span>
+<span id="cb54-5"><a href="#cb54-5" aria-hidden="true" tabindex="-1"></a>    l.backward()</span>
+<span id="cb54-6"><a href="#cb54-6" aria-hidden="true" tabindex="-1"></a>    optimizer2.step()</span>
+<span id="cb54-7"><a href="#cb54-7" aria-hidden="true" tabindex="-1"></a>    optimizer2.zero_grad()</span>
+<span id="cb54-8"><a href="#cb54-8" aria-hidden="true" tabindex="-1"></a>    loss_values[i]<span class="op">=</span>l</span>
+<span id="cb54-9"><a href="#cb54-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> i<span class="op">%</span><span class="dv">1000</span><span class="op">==</span><span class="dv">0</span>:</span>
+<span id="cb54-10"><a href="#cb54-10" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">"Loss at epoch </span><span class="sc">{}</span><span class="st">: </span><span class="sc">{}</span><span class="st">"</span>.<span class="bu">format</span>(i, l.item()))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Loss at epoch 0: 0.89188551902771
 Loss at epoch 1000: 0.003854417707771063
@@ -858,44 +934,44 @@ Loss at epoch 99000: 0.0005574636743403971</code></pre>
 </div>
 <p>Evidently, the convergence to a solution is much more rapid (one needs far fewer epochs to obtain the same loss as in the more traditional neural network). Below are plots of the solution, as well as an animation. These look virtually identical to the results using the more traditional neural network.</p>
 <div class="cell" data-execution_count="11">
-<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>x_test, y_test, z_test, xbdry_test, ybdry_test, zbdry_test <span class="op">=</span> SampleFromUnitBall(<span class="dv">10000</span>)</span>
-<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> plot_points2(time_index):</span>
-<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> torch.no_grad():</span>
-<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a>        soln <span class="op">=</span> network_value(x_test,y_test,torch.ones(<span class="dv">10000</span>).unsqueeze(<span class="dv">1</span>)<span class="op">*</span>time_index<span class="op">/</span><span class="dv">100</span>,model2)</span>
-<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a>    plt.scatter(x<span class="op">=</span>x_test.detach(),y<span class="op">=</span>y_test.detach(),c<span class="op">=</span>soln.detach(), vmin<span class="op">=</span><span class="dv">0</span>, vmax<span class="op">=</span><span class="fl">0.35</span>)</span>
-<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a>    plt.title(<span class="st">"Solution at time index "</span> <span class="op">+</span> <span class="bu">str</span>(time_index))</span>
-<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a>    plt.xlabel(<span class="st">"x-axis"</span>)</span>
-<span id="cb44-9"><a href="#cb44-9" aria-hidden="true" tabindex="-1"></a>    plt.ylabel(<span class="st">"y-axis"</span>)</span>
-<span id="cb44-10"><a href="#cb44-10" aria-hidden="true" tabindex="-1"></a>    plt.show()</span>
-<span id="cb44-11"><a href="#cb44-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-12"><a href="#cb44-12" aria-hidden="true" tabindex="-1"></a>plot_points2(<span class="dv">0</span>)</span>
-<span id="cb44-13"><a href="#cb44-13" aria-hidden="true" tabindex="-1"></a>plot_points2(<span class="dv">3</span>)</span>
-<span id="cb44-14"><a href="#cb44-14" aria-hidden="true" tabindex="-1"></a>plot_points2(<span class="dv">9</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>x_test, y_test, z_test, xbdry_test, ybdry_test, zbdry_test <span class="op">=</span> SampleFromUnitBall(<span class="dv">10000</span>)</span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-3"><a href="#cb56-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> plot_points2(time_index):</span>
+<span id="cb56-4"><a href="#cb56-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> torch.no_grad():</span>
+<span id="cb56-5"><a href="#cb56-5" aria-hidden="true" tabindex="-1"></a>        soln <span class="op">=</span> network_value(x_test,y_test,torch.ones(<span class="dv">10000</span>).unsqueeze(<span class="dv">1</span>)<span class="op">*</span>time_index<span class="op">/</span><span class="dv">100</span>,model2)</span>
+<span id="cb56-6"><a href="#cb56-6" aria-hidden="true" tabindex="-1"></a>    plt.scatter(x<span class="op">=</span>x_test.detach(),y<span class="op">=</span>y_test.detach(),c<span class="op">=</span>soln.detach(), vmin<span class="op">=</span><span class="dv">0</span>, vmax<span class="op">=</span><span class="fl">0.35</span>)</span>
+<span id="cb56-7"><a href="#cb56-7" aria-hidden="true" tabindex="-1"></a>    plt.title(<span class="st">"Solution at time index "</span> <span class="op">+</span> <span class="bu">str</span>(time_index))</span>
+<span id="cb56-8"><a href="#cb56-8" aria-hidden="true" tabindex="-1"></a>    plt.xlabel(<span class="st">"x-axis"</span>)</span>
+<span id="cb56-9"><a href="#cb56-9" aria-hidden="true" tabindex="-1"></a>    plt.ylabel(<span class="st">"y-axis"</span>)</span>
+<span id="cb56-10"><a href="#cb56-10" aria-hidden="true" tabindex="-1"></a>    plt.show()</span>
+<span id="cb56-11"><a href="#cb56-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-12"><a href="#cb56-12" aria-hidden="true" tabindex="-1"></a>plot_points2(<span class="dv">0</span>)</span>
+<span id="cb56-13"><a href="#cb56-13" aria-hidden="true" tabindex="-1"></a>plot_points2(<span class="dv">3</span>)</span>
+<span id="cb56-14"><a href="#cb56-14" aria-hidden="true" tabindex="-1"></a>plot_points2(<span class="dv">9</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<p><img src="Hydrogen Atom Ground State_files/figure-html/cell-32-output-1.png" class="img-fluid"></p>
+<p><img src="Hydrogen Atom Ground State_files/figure-html/cell-39-output-1.png" class="img-fluid"></p>
 </div>
 <div class="cell-output cell-output-display">
-<p><img src="Hydrogen Atom Ground State_files/figure-html/cell-32-output-2.png" class="img-fluid"></p>
+<p><img src="Hydrogen Atom Ground State_files/figure-html/cell-39-output-2.png" class="img-fluid"></p>
 </div>
 <div class="cell-output cell-output-display">
-<p><img src="Hydrogen Atom Ground State_files/figure-html/cell-32-output-3.png" class="img-fluid"></p>
+<p><img src="Hydrogen Atom Ground State_files/figure-html/cell-39-output-3.png" class="img-fluid"></p>
 </div>
 </div>
 <p>Interestingly, projecting the solution into the future past <span class="math inline">\(t=0.09\)</span> seems to yield a less accurate solution than the one I got from the neural network. But still, this isn’t bad and leads to some interesting theoretical questions as to the degree of polynomial required to get “future in time” predictions which are as accurate as the network.</p>
 <div class="cell" data-execution_count="12">
-<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>x_test, y_test, z_test, xbdry_test, ybdry_test, zbdry_test <span class="op">=</span> SampleFromUnitBall(<span class="dv">10000</span>)</span>
-<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots()</span>
-<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> k <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">20</span>):</span>
-<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> torch.no_grad():</span>
-<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>        soln <span class="op">=</span> network_value(x_test,y_test,torch.ones(<span class="dv">10000</span>).unsqueeze(<span class="dv">1</span>)<span class="op">*</span>k<span class="op">/</span><span class="dv">100</span>,model2)</span>
-<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a>    ax.cla()</span>
-<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a>    ax.scatter(x<span class="op">=</span>x_test.detach(),y<span class="op">=</span>y_test.detach(),c<span class="op">=</span>soln.detach(), vmin<span class="op">=</span><span class="dv">0</span>, vmax<span class="op">=</span><span class="fl">0.35</span>)</span>
-<span id="cb45-8"><a href="#cb45-8" aria-hidden="true" tabindex="-1"></a>    display(fig)</span>
-<span id="cb45-9"><a href="#cb45-9" aria-hidden="true" tabindex="-1"></a>    clear_output(wait <span class="op">=</span> <span class="va">True</span>)</span>
-<span id="cb45-10"><a href="#cb45-10" aria-hidden="true" tabindex="-1"></a>    plt.pause(<span class="fl">0.1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a>x_test, y_test, z_test, xbdry_test, ybdry_test, zbdry_test <span class="op">=</span> SampleFromUnitBall(<span class="dv">10000</span>)</span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots()</span>
+<span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> k <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">20</span>):</span>
+<span id="cb57-4"><a href="#cb57-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> torch.no_grad():</span>
+<span id="cb57-5"><a href="#cb57-5" aria-hidden="true" tabindex="-1"></a>        soln <span class="op">=</span> network_value(x_test,y_test,torch.ones(<span class="dv">10000</span>).unsqueeze(<span class="dv">1</span>)<span class="op">*</span>k<span class="op">/</span><span class="dv">100</span>,model2)</span>
+<span id="cb57-6"><a href="#cb57-6" aria-hidden="true" tabindex="-1"></a>    ax.cla()</span>
+<span id="cb57-7"><a href="#cb57-7" aria-hidden="true" tabindex="-1"></a>    ax.scatter(x<span class="op">=</span>x_test.detach(),y<span class="op">=</span>y_test.detach(),c<span class="op">=</span>soln.detach(), vmin<span class="op">=</span><span class="dv">0</span>, vmax<span class="op">=</span><span class="fl">0.35</span>)</span>
+<span id="cb57-8"><a href="#cb57-8" aria-hidden="true" tabindex="-1"></a>    display(fig)</span>
+<span id="cb57-9"><a href="#cb57-9" aria-hidden="true" tabindex="-1"></a>    clear_output(wait <span class="op">=</span> <span class="va">True</span>)</span>
+<span id="cb57-10"><a href="#cb57-10" aria-hidden="true" tabindex="-1"></a>    plt.pause(<span class="fl">0.1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<p><img src="Hydrogen Atom Ground State_files/figure-html/cell-33-output-1.png" class="img-fluid"></p>
+<p><img src="Hydrogen Atom Ground State_files/figure-html/cell-40-output-1.png" class="img-fluid"></p>
 </div>
 </div>
 <p>Now that I have all of this set up, it would be interesting to run the code against more complicated initial conditions. I leave this exercise to the reader. Next time, I think I’ll get back to something more like the Poisson equation, or perhaps work on solving PDEs which arise from variational problems. Overall, solving PDEs using neural networks or polynomial regression is proving productive and interesting!</p>
