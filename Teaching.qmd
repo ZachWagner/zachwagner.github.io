@@ -9,6 +9,9 @@ sidebar: false
 
 ## Courses as a Teaching Assistant
 
+* Math 117, Summer Session A 2024
+* Math 118C, Spring 2024
+* Math 118B, Winter 2024
 * Math 6A, Winter 2022
 * Math 6B, Fall 2021
 * Math 117, Summer Session B 2021 (Remote Instruction)
