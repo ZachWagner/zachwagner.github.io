@@ -12,8 +12,8 @@ website:
         text: "Research"
       - file: Teaching.qmd
         text: "Teaching"
-      - file: Blog.qmd
-        text: "Blog"
+      #- file: Blog.qmd
+      #  text: "Blog"
 
   search:
     location: navbar

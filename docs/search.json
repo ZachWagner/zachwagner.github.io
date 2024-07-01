@@ -1,12 +1,5 @@
 [
   {
-    "objectID": "Blog.html",
-    "href": "Blog.html",
-    "title": "Blog",
-    "section": "",
-    "text": "I post blog entries discussing a variety of mathematical topics, as well as some personal anecdotes about my experiences in academia. I try to post a variety of topics, including those related to my research as well as some slightly off-topic mathematical interests. Please note that I’m the only one who proofreads the material I post; if you notice any errors, please let me know and I will be happy to correct them.\n\n\n\n\n\n\n\n\n  \n\n\n\n\nRestricting the Dirac-Fock energy to the Electron Subspace\n\n\n\n\n\n\n\nFunctional Analysis\n\n\nPartial Differential Equations\n\n\n\n\nA variational method to solving the Dirac-Fock equations when restricted to the subspace induced by the positive spectral projector of the dirac operator.\n\n\n\n\n\n\nNov 5, 2023\n\n\nZach Wagner\n\n\n\n\n\n\n  \n\n\n\n\nSimple ML Architectures to Solve the Heat Equation\n\n\n\n\n\n\n\nPartial Differential Equations\n\n\nMachine Learning\n\n\n\n\nWe use a neural network and polynomial regression to solve the heat equation and compare the results qualitatively.\n\n\n\n\n\n\nSep 21, 2023\n\n\nZach Wagner\n\n\n\n\n\n\n  \n\n\n\n\nNeural Poisson Solver\n\n\n\n\n\n\n\nPartial Differential Equations\n\n\nMachine Learning\n\n\n\n\nSolving a simple PDE using a neural network\n\n\n\n\n\n\nSep 8, 2023\n\n\nZach Wagner\n\n\n\n\n\n\n  \n\n\n\n\nFractional Derivatives\n\n\n\n\n\n\n\nOperator Theory\n\n\nFunctional Analysis\n\n\nPartial Differential Equations\n\n\n\n\nA quick introduction to the theory and some applications of fractional derivatives.\n\n\n\n\n\n\nAug 3, 2023\n\n\nZach Wagner\n\n\n\n\n\n\nNo matching items"
-  },
-  {
     "objectID": "Teaching.html",
     "href": "Teaching.html",
     "title": "Teaching",
